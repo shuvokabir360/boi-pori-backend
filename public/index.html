@@ -140,6 +140,47 @@
       animation: fadeIn 0.4s ease;
     }
 
+    /* Sub-tabs Styling */
+    .sub-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+    }
+
+    .sub-tab-btn {
+      padding: 10px 22px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    .sub-tab-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+    }
+
+    .sub-tab-btn.active {
+      background: rgba(34, 197, 94, 0.1);
+      border-color: rgba(34, 197, 94, 0.3);
+      color: #22c55e;
+    }
+
+    .sub-tab-view {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .sub-tab-view.active {
+      display: block;
+    }
+
     .grid-container {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -470,49 +511,86 @@
 
   <div class="container">
     <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('vowels')">স্বরবর্ণ (Vowels)</button>
-      <button class="tab-btn" onclick="switchTab('consonants')">ব্যঞ্জনবর্ণ (Consonants)</button>
-      <button class="tab-btn" onclick="switchTab('words')">শব্দ শিখন (Vowel Words)</button>
+      <button class="tab-btn active" onclick="switchTab('bangla')">বাংলা (Bangla)</button>
+      <button class="tab-btn" onclick="switchTab('english')">ইংরেজি (English)</button>
+      <button class="tab-btn" onclick="switchTab('math')">অংক (Math)</button>
+      <button class="tab-btn" onclick="switchTab('arabic')">আরবী (Arabic)</button>
       <button class="tab-btn" onclick="switchTab('settings')">অ্যাপ সেটিংস (App Settings)</button>
     </div>
 
-    <!-- Vowels Tab Content -->
-    <div id="vowels-content" class="tab-content active">
-      <div class="search-bar-container" style="margin-bottom: 24px; display: flex; gap: 15px; align-items: center; background: var(--surface); padding: 16px 20px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
-        <input type="text" id="vowels-search" class="form-control" placeholder="বর্ণ বা উচ্চারণ লিখে খুঁজুন..." oninput="filterGrid('vowels')" style="max-width: 350px;">
-        <select id="vowels-filter" class="form-control" onchange="filterGrid('vowels')" style="max-width: 200px; cursor: pointer;">
-          <option value="all">সব ভয়েস দেখান</option>
-          <option value="custom">কাস্টম ভয়েস আছে</option>
-          <option value="default">ডিফল্ট ভয়েস আছে</option>
-        </select>
+    <!-- Bangla Category Tab Content -->
+    <div id="bangla-content" class="tab-content active">
+      <div class="sub-tabs">
+        <button class="sub-tab-btn active" onclick="switchSubTab('vowels')">স্বরবর্ণ (Vowels)</button>
+        <button class="sub-tab-btn" onclick="switchSubTab('consonants')">ব্যঞ্জনবর্ণ (Consonants)</button>
+        <button class="sub-tab-btn" onclick="switchSubTab('words')">শব্দ শিখন (Vowel Words)</button>
       </div>
-      <div class="grid-container" id="vowels-grid"></div>
+
+      <!-- Sub-tab Vowels View -->
+      <div id="sub-vowels-view" class="sub-tab-view active">
+        <div class="search-bar-container" style="margin-bottom: 24px; display: flex; gap: 15px; align-items: center; background: var(--surface); padding: 16px 20px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+          <input type="text" id="vowels-search" class="form-control" placeholder="বর্ণ বা উচ্চারণ লিখে খুঁজুন..." oninput="filterGrid('vowels')" style="max-width: 350px;">
+          <select id="vowels-filter" class="form-control" onchange="filterGrid('vowels')" style="max-width: 200px; cursor: pointer;">
+            <option value="all">সব ভয়েস দেখান</option>
+            <option value="custom">কাস্টম ভয়েস আছে</option>
+            <option value="default">ডিফল্ট ভয়েস আছে</option>
+          </select>
+        </div>
+        <div class="grid-container" id="vowels-grid"></div>
+      </div>
+
+      <!-- Sub-tab Consonants View -->
+      <div id="sub-consonants-view" class="sub-tab-view" style="display: none;">
+        <div class="search-bar-container" style="margin-bottom: 24px; display: flex; gap: 15px; align-items: center; background: var(--surface); padding: 16px 20px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+          <input type="text" id="consonants-search" class="form-control" placeholder="বর্ণ লিখে খুঁজুন..." oninput="filterGrid('consonants')" style="max-width: 350px;">
+          <select id="consonants-filter" class="form-control" onchange="filterGrid('consonants')" style="max-width: 200px; cursor: pointer;">
+            <option value="all">সব ভয়েস দেখান</option>
+            <option value="custom">কাস্টম ভয়েস আছে</option>
+            <option value="default">ডিফল্ট ভয়েস আছে</option>
+          </select>
+        </div>
+        <div class="grid-container" id="consonants-grid"></div>
+      </div>
+
+      <!-- Sub-tab Words View -->
+      <div id="sub-words-view" class="sub-tab-view" style="display: none;">
+        <div class="search-bar-container" style="margin-bottom: 24px; display: flex; gap: 15px; align-items: center; background: var(--surface); padding: 16px 20px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+          <input type="text" id="words-search" class="form-control" placeholder="শব্দ, বর্ণ বা ছড়া লিখে খুঁজুন..." oninput="filterGrid('words')" style="max-width: 350px;">
+          <select id="words-filter" class="form-control" onchange="filterGrid('words')" style="max-width: 200px; cursor: pointer;">
+            <option value="all">সব ভয়েস দেখান</option>
+            <option value="custom">কাস্টম ভয়েস আছে</option>
+            <option value="default">ডিফল্ট ভয়েস আছে</option>
+          </select>
+        </div>
+        <div class="grid-container" id="words-grid"></div>
+      </div>
     </div>
 
-    <!-- Consonants Tab Content -->
-    <div id="consonants-content" class="tab-content">
-      <div class="search-bar-container" style="margin-bottom: 24px; display: flex; gap: 15px; align-items: center; background: var(--surface); padding: 16px 20px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
-        <input type="text" id="consonants-search" class="form-control" placeholder="বর্ণ লিখে খুঁজুন..." oninput="filterGrid('consonants')" style="max-width: 350px;">
-        <select id="consonants-filter" class="form-control" onchange="filterGrid('consonants')" style="max-width: 200px; cursor: pointer;">
-          <option value="all">সব ভয়েস দেখান</option>
-          <option value="custom">কাস্টম ভয়েস আছে</option>
-          <option value="default">ডিফল্ট ভয়েস আছে</option>
-        </select>
+    <!-- English Category Tab Content -->
+    <div id="english-content" class="tab-content">
+      <div style="text-align: center; padding: 60px 40px; background: var(--surface); border-radius: 20px; border: 1px solid var(--border);">
+        <div style="font-size: 56px; margin-bottom: 24px;">🇬🇧</div>
+        <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 12px; color: var(--text);">ইংরেজি শিক্ষার সেটিংস</h2>
+        <p style="color: var(--text-muted); font-size: 15px;">ইংরেজি ক্যাটাগরির বর্ণমালা ও শব্দ আপডেটের অপশন শীঘ্রই যুক্ত করা হবে।</p>
       </div>
-      <div class="grid-container" id="consonants-grid"></div>
     </div>
 
-    <!-- Vowel Words Tab Content -->
-    <div id="words-content" class="tab-content">
-      <div class="search-bar-container" style="margin-bottom: 24px; display: flex; gap: 15px; align-items: center; background: var(--surface); padding: 16px 20px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
-        <input type="text" id="words-search" class="form-control" placeholder="শব্দ, বর্ণ বা ছড়া লিখে খুঁজুন..." oninput="filterGrid('words')" style="max-width: 350px;">
-        <select id="words-filter" class="form-control" onchange="filterGrid('words')" style="max-width: 200px; cursor: pointer;">
-          <option value="all">সব ভয়েস দেখান</option>
-          <option value="custom">কাস্টম ভয়েস আছে</option>
-          <option value="default">ডিফল্ট ভয়েস আছে</option>
-        </select>
+    <!-- Math Category Tab Content -->
+    <div id="math-content" class="tab-content">
+      <div style="text-align: center; padding: 60px 40px; background: var(--surface); border-radius: 20px; border: 1px solid var(--border);">
+        <div style="font-size: 56px; margin-bottom: 24px;">🔢</div>
+        <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 12px; color: var(--text);">অংক শিক্ষার সেটিংস</h2>
+        <p style="color: var(--text-muted); font-size: 15px;">অংক ক্যাটাগরির সংখ্যা ও যোগ-বিয়োগের মান আপডেটের অপশন শীঘ্রই যুক্ত করা হবে।</p>
       </div>
-      <div class="grid-container" id="words-grid"></div>
+    </div>
+
+    <!-- Arabic Category Tab Content -->
+    <div id="arabic-content" class="tab-content">
+      <div style="text-align: center; padding: 60px 40px; background: var(--surface); border-radius: 20px; border: 1px solid var(--border);">
+        <div style="font-size: 56px; margin-bottom: 24px;">🕌</div>
+        <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 12px; color: var(--text);">আরবী শিক্ষার সেটিংস</h2>
+        <p style="color: var(--text-muted); font-size: 15px;">আরবী ক্যাটাগরির হরফ ও কুরআন শিক্ষার মান আপডেটের অপশন শীঘ্রই যুক্ত করা হবে।</p>
+      </div>
     </div>
 
     <!-- Settings Tab Content -->
@@ -864,18 +942,59 @@
 
       event.target.classList.add('active');
       document.getElementById(`${tabId}-content`).classList.add('active');
+    }
+
+    function switchSubTab(subTabId) {
+      document.querySelectorAll('.sub-tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.sub-tab-view').forEach(view => view.style.display = 'none');
+
+      event.target.classList.add('active');
+      document.getElementById(`sub-${subTabId}-view`).style.display = 'block';
 
       // Reset search inputs & filters on switch
-      const searchInput = document.getElementById(`${tabId}-search`);
-      const filterSelect = document.getElementById(`${tabId}-filter`);
+      const searchInput = document.getElementById(`${subTabId}-search`);
+      const filterSelect = document.getElementById(`${subTabId}-filter`);
       if (searchInput) searchInput.value = '';
       if (filterSelect) filterSelect.value = 'all';
       
-      const grid = document.getElementById(`${tabId}-grid`);
+      const grid = document.getElementById(`${subTabId}-grid`);
       if (grid) {
         const cards = grid.getElementsByClassName('card');
         for (let card of cards) {
           card.style.display = '';
+        }
+      }
+    }
+
+    function navigateToSubTab(subTabName, subTabIndex) {
+      // 1. Activate Bangla tab
+      const banglaTabBtn = document.querySelectorAll('.tab-btn')[0];
+      if (banglaTabBtn) {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        banglaTabBtn.classList.add('active');
+        document.getElementById('bangla-content').classList.add('active');
+      }
+      // 2. Activate the sub-tab
+      const subTabBtn = document.querySelectorAll('.sub-tab-btn')[subTabIndex];
+      if (subTabBtn) {
+        document.querySelectorAll('.sub-tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.sub-tab-view').forEach(view => view.style.display = 'none');
+        subTabBtn.classList.add('active');
+        document.getElementById(`sub-${subTabName}-view`).style.display = 'block';
+
+        // Clear search inputs & filters
+        const searchInput = document.getElementById(`${subTabName}-search`);
+        const filterSelect = document.getElementById(`${subTabName}-filter`);
+        if (searchInput) searchInput.value = '';
+        if (filterSelect) filterSelect.value = 'all';
+        
+        const grid = document.getElementById(`${subTabName}-grid`);
+        if (grid) {
+          const cards = grid.getElementsByClassName('card');
+          for (let card of cards) {
+            card.style.display = '';
+          }
         }
       }
     }
