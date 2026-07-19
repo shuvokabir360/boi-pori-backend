@@ -73,6 +73,28 @@
       font-weight: 600;
     }
 
+    .badge {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+      margin-left: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .badge-custom {
+      background-color: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    
+    .badge-default {
+      background-color: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
     .container {
       max-width: 1400px;
       margin: 40px auto;
@@ -804,6 +826,9 @@
               <button class="play-audio-btn" onclick="playAudio('${item.audioPath}')" title="Play">
                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
               </button>
+              ${item.audioPath && item.audioPath.startsWith('http') 
+                ? '<span class="badge badge-custom">কাস্টম ভয়েস</span>' 
+                : '<span class="badge badge-default">ডিফল্ট</span>'}
             </div>
           </div>
           <button class="edit-btn" onclick="openEditVowel(${index})">সম্পাদন করুন</button>
@@ -829,6 +854,9 @@
               <button class="play-audio-btn" onclick="playAudio('${item.audioPath}')" title="Play">
                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
               </button>
+              ${item.audioPath && item.audioPath.startsWith('http') 
+                ? '<span class="badge badge-custom">কাস্টম ভয়েস</span>' 
+                : '<span class="badge badge-default">ডিফল্ট</span>'}
             </div>
           </div>
           <button class="edit-btn" onclick="openEditConsonant(${index})">সম্পাদন করুন</button>
@@ -866,6 +894,9 @@
               <button class="play-audio-btn" onclick="playAudio('${item.audioPath}')" title="Play">
                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
               </button>
+              ${item.audioPath && item.audioPath.startsWith('http') 
+                ? '<span class="badge badge-custom">কাস্টম ভয়েস</span>' 
+                : '<span class="badge badge-default">ডিফল্ট</span>'}
             </div>
           </div>
           <button class="edit-btn" onclick="openEditWord(${index})">সম্পাদন করুন</button>
@@ -904,6 +935,13 @@
           document.getElementById(targetUrlId).value = data.url;
           filenameLabel.textContent = `সফলভাবে আপলোড হয়েছে: ${file.name}`;
           filenameLabel.style.color = 'var(--success)';
+          
+          // Auto save form upon successful voice/image upload
+          const formElement = inputElement.closest('form');
+          if (formElement) {
+            formElement.dataset.autoSave = "true";
+            formElement.requestSubmit();
+          }
         } else {
           filenameLabel.textContent = `আপলোড ব্যর্থ হয়েছে`;
           filenameLabel.style.color = 'var(--danger)';
@@ -933,6 +971,10 @@
 
     function saveVowel(e) {
       e.preventDefault();
+      const form = document.getElementById('vowel-form');
+      const isAutoSave = form.dataset.autoSave === "true";
+      form.dataset.autoSave = "false";
+
       const payload = {
         char: document.getElementById('vowel-char').value,
         pronunciation: document.getElementById('vowel-pron').value,
@@ -951,6 +993,9 @@
         if (data.success) {
           closeModal('vowel-modal');
           fetchData();
+          if (!isAutoSave) {
+            alert('স্বরবর্ণ সফলভাবে সংরক্ষণ করা হয়েছে!');
+          }
         }
       });
     }
@@ -969,6 +1014,10 @@
 
     function saveConsonant(e) {
       e.preventDefault();
+      const form = document.getElementById('consonant-form');
+      const isAutoSave = form.dataset.autoSave === "true";
+      form.dataset.autoSave = "false";
+
       const payload = {
         char: document.getElementById('consonant-char').value,
         textColor: document.getElementById('consonant-text-color').value,
@@ -986,6 +1035,9 @@
         if (data.success) {
           closeModal('consonant-modal');
           fetchData();
+          if (!isAutoSave) {
+            alert('ব্যঞ্জনবর্ণ সফলভাবে সংরক্ষণ করা হয়েছে!');
+          }
         }
       });
     }
@@ -1012,6 +1064,10 @@
 
     function saveWord(e) {
       e.preventDefault();
+      const form = document.getElementById('word-form');
+      const isAutoSave = form.dataset.autoSave === "true";
+      form.dataset.autoSave = "false";
+
       const payload = {
         letter: document.getElementById('word-letter').value,
         word: document.getElementById('word-title').value,
@@ -1032,12 +1088,19 @@
         if (data.success) {
           closeModal('word-modal');
           fetchData();
+          if (!isAutoSave) {
+            alert('শব্দ শিক্ষণ সফলভাবে সংরক্ষণ করা হয়েছে!');
+          }
         }
       });
     }
 
     function saveSettings(e) {
       e.preventDefault();
+      const form = document.getElementById('settings-form');
+      const isAutoSave = form.dataset.autoSave === "true";
+      form.dataset.autoSave = "false";
+
       const payload = {
         welcomeText: document.getElementById('settings-welcome-text').value,
         welcomeAudioPath: document.getElementById('settings-welcome-audio-url').value,
@@ -1053,8 +1116,10 @@
       .then(r => r.json())
       .then(data => {
         if (data.success) {
-          alert('অ্যাপ সেটিংস সফলভাবে সংরক্ষণ করা হয়েছে!');
           fetchData();
+          if (!isAutoSave) {
+            alert('অ্যাপ সেটিংস সফলভাবে সংরক্ষণ করা হয়েছে!');
+          }
         }
       });
     }
