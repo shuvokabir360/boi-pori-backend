@@ -67,22 +67,35 @@ function writeDB(data) {
   }
 }
 
+// URL Normalizer to translate saved localhost paths to current request host dynamically
+function normalizeUrls(obj, req) {
+  if (!obj) return obj;
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+  const host = req.get('host');
+  const currentOrigin = `${protocol}://${host}`;
+
+  const jsonStr = JSON.stringify(obj);
+  const normalizedStr = jsonStr.replace(/http:\/\/localhost:\d+/g, currentOrigin)
+                               .replace(/http:\/\/10\.0\.2\.2:\d+/g, currentOrigin);
+  return JSON.parse(normalizedStr);
+}
+
 // -------------------------------- API Endpoints --------------------------------
 
 // 1. Get Lists
 app.get('/api/vowels', (req, res) => {
   const db = readDB();
-  res.json(db.vowels);
+  res.json(normalizeUrls(db.vowels, req));
 });
 
 app.get('/api/consonants', (req, res) => {
   const db = readDB();
-  res.json(db.consonants);
+  res.json(normalizeUrls(db.consonants, req));
 });
 
 app.get('/api/words', (req, res) => {
   const db = readDB();
-  res.json(db.vowel_words);
+  res.json(normalizeUrls(db.vowel_words, req));
 });
 
 // 2. File Upload API
@@ -91,9 +104,11 @@ app.post('/api/upload', upload.single('file'), (req, res) => {
     return res.status(400).json({ error: 'No file uploaded' });
   }
   
-  // Return the relative URL to access the uploaded file
+  // Return the dynamic absolute URL to access the uploaded file
   const subfolder = req.file.mimetype.startsWith('image/') ? 'images' : 'audio';
-  const fileUrl = `http://localhost:${PORT}/uploads/${subfolder}/${req.file.filename}`;
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+  const host = req.get('host');
+  const fileUrl = `${protocol}://${host}/uploads/${subfolder}/${req.file.filename}`;
   res.json({ url: fileUrl });
 });
 
@@ -173,7 +188,7 @@ app.post('/api/words/update', (req, res) => {
 // 6. Get Settings API
 app.get('/api/settings', (req, res) => {
   const db = readDB();
-  res.json(db.settings || {});
+  res.json(normalizeUrls(db.settings || {}, req));
 });
 
 // 7. Update Settings API
