@@ -485,6 +485,11 @@
               <p id="settings-welcome-audio-filename">স্বাগত বক্তব্যের ভয়েস আপলোড করতে এখানে ক্লিক করুন</p>
             </div>
             <input type="hidden" id="settings-welcome-audio-url">
+            <div style="margin-top:10px;">
+              <button type="button" class="btn btn-secondary" onclick="previewFormAudio('settings-welcome-audio-url')" style="padding: 6px 12px; font-size: 13px; display: flex; align-items: center; gap: 6px;">
+                <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
+              </button>
+            </div>
           </div>
           <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
           <div class="form-group">
@@ -498,6 +503,11 @@
               <p id="settings-bangla-audio-filename">বাংলা স্ক্রিনের ভয়েস আপলোড করতে এখানে ক্লিক করুন</p>
             </div>
             <input type="hidden" id="settings-bangla-audio-url">
+            <div style="margin-top:10px;">
+              <button type="button" class="btn btn-secondary" onclick="previewFormAudio('settings-bangla-audio-url')" style="padding: 6px 12px; font-size: 13px; display: flex; align-items: center; gap: 6px;">
+                <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
+              </button>
+            </div>
           </div>
           <div style="margin-top: 30px;">
             <button type="submit" class="btn btn-primary" style="width: 100%;">সেটিংস সংরক্ষণ করুন</button>
@@ -549,6 +559,11 @@
             <p id="vowel-audio-filename">ভয়েস আপলোড করতে এখানে ক্লিক করুন</p>
           </div>
           <input type="hidden" id="vowel-audio-url">
+          <div style="margin-top:10px;">
+            <button type="button" class="btn btn-secondary" onclick="previewFormAudio('vowel-audio-url')" style="padding: 6px 12px; font-size: 13px; display: flex; align-items: center; gap: 6px;">
+              <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
+            </button>
+          </div>
         </div>
         <div class="modal-actions">
           <button type="button" class="btn btn-secondary" onclick="closeModal('vowel-modal')">বাতিল</button>
@@ -591,6 +606,11 @@
             <p id="consonant-audio-filename">ভয়েস আপলোড করতে এখানে ক্লিক করুন</p>
           </div>
           <input type="hidden" id="consonant-audio-url">
+          <div style="margin-top:10px;">
+            <button type="button" class="btn btn-secondary" onclick="previewFormAudio('consonant-audio-url')" style="padding: 6px 12px; font-size: 13px; display: flex; align-items: center; gap: 6px;">
+              <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
+            </button>
+          </div>
         </div>
         <div class="modal-actions">
           <button type="button" class="btn btn-secondary" onclick="closeModal('consonant-modal')">বাতিল</button>
@@ -649,6 +669,11 @@
             <p id="word-audio-filename">শব্দের সম্পূর্ণ ভয়েস আপলোড করতে এখানে ক্লিক করুন</p>
           </div>
           <input type="hidden" id="word-audio-url">
+          <div style="margin-top:10px;">
+            <button type="button" class="btn btn-secondary" onclick="previewFormAudio('word-audio-url')" style="padding: 6px 12px; font-size: 13px; display: flex; align-items: center; gap: 6px;">
+              <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
+            </button>
+          </div>
         </div>
         <div class="modal-actions">
           <button type="button" class="btn btn-secondary" onclick="closeModal('word-modal')">বাতিল</button>
@@ -733,6 +758,15 @@
 
       event.target.classList.add('active');
       document.getElementById(`${tabId}-content`).classList.add('active');
+    }
+
+    function previewFormAudio(urlInputId) {
+      const url = document.getElementById(urlInputId).value;
+      if (!url) {
+        alert('কোনো ভয়েস আপলোড বা সেট করা নেই!');
+        return;
+      }
+      playAudio(url);
     }
 
     // Play Audio Helper
