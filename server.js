@@ -52,10 +52,15 @@ const DB_PATH = path.join(__dirname, 'database.json');
 function readDB() {
   try {
     const data = fs.readFileSync(DB_PATH, 'utf8');
-    return JSON.parse(data);
+    const parsed = JSON.parse(data);
+    if (!parsed.vowels) parsed.vowels = [];
+    if (!parsed.consonants) parsed.consonants = [];
+    if (!parsed.vowel_words) parsed.vowel_words = [];
+    if (!parsed.consonant_words) parsed.consonant_words = [];
+    return parsed;
   } catch (err) {
     console.error('Error reading database file:', err);
-    return { vowels: [], consonants: [], vowel_words: [] };
+    return { vowels: [], consonants: [], vowel_words: [], consonant_words: [] };
   }
 }
 
@@ -185,6 +190,37 @@ app.post('/api/words/update', (req, res) => {
   }
 });
 
+// 5.5 Get Consonant Words
+app.get('/api/consonant-words', (req, res) => {
+  const db = readDB();
+  res.json(normalizeUrls(db.consonant_words || [], req));
+});
+
+// 5.6 Update Consonant Word Item
+app.post('/api/consonant-words/update', (req, res) => {
+  const { letter, word, rhyme, imagePath, audioPath, themeColor, cardColor } = req.body;
+  if (!letter) return res.status(400).json({ error: 'Letter is required' });
+
+  const db = readDB();
+  const index = db.consonant_words.findIndex(item => item.letter === letter);
+  
+  if (index !== -1) {
+    db.consonant_words[index] = {
+      ...db.consonant_words[index],
+      word: word || db.consonant_words[index].word,
+      rhyme: rhyme || db.consonant_words[index].rhyme,
+      imagePath: imagePath || db.consonant_words[index].imagePath,
+      audioPath: audioPath || db.consonant_words[index].audioPath,
+      themeColor: themeColor || db.consonant_words[index].themeColor,
+      cardColor: cardColor || db.consonant_words[index].cardColor
+    };
+    writeDB(db);
+    res.json({ success: true, item: db.consonant_words[index] });
+  } else {
+    res.status(404).json({ error: 'Consonant Word item not found for this letter' });
+  }
+});
+
 // 6. Get Settings API
 app.get('/api/settings', (req, res) => {
   const db = readDB();
@@ -215,6 +251,39 @@ app.post('/api/settings/update', (req, res) => {
   
   writeDB(db);
   res.json({ success: true, settings: db.settings });
+});
+
+// 7.5 Get Categories API
+app.get('/api/categories', (req, res) => {
+  const db = readDB();
+  res.json(normalizeUrls(db.categories || [], req));
+});
+
+// 7.6 Update Category API
+app.post('/api/categories/update', (req, res) => {
+  const { id, title, letters, imagePath, gradientColors, shadowColor, voicePrompt, introText, audioPath } = req.body;
+  const db = readDB();
+  
+  if (!db.categories) db.categories = [];
+  
+  const catIndex = db.categories.findIndex(c => c.id === id);
+  if (catIndex !== -1) {
+    db.categories[catIndex] = {
+      ...db.categories[catIndex],
+      title: title !== undefined ? title : db.categories[catIndex].title,
+      letters: letters !== undefined ? letters : db.categories[catIndex].letters,
+      imagePath: imagePath !== undefined ? imagePath : db.categories[catIndex].imagePath,
+      gradientColors: gradientColors !== undefined ? gradientColors : db.categories[catIndex].gradientColors,
+      shadowColor: shadowColor !== undefined ? shadowColor : db.categories[catIndex].shadowColor,
+      voicePrompt: voicePrompt !== undefined ? voicePrompt : db.categories[catIndex].voicePrompt,
+      introText: introText !== undefined ? introText : db.categories[catIndex].introText,
+      audioPath: audioPath !== undefined ? audioPath : db.categories[catIndex].audioPath
+    };
+    writeDB(db);
+    res.json({ success: true, category: db.categories[catIndex] });
+  } else {
+    res.status(404).json({ success: false, message: 'Category not found' });
+  }
 });
 
 // 8. Reset database to defaults
@@ -287,6 +356,244 @@ app.post('/api/reset', (req, res) => {
       { "letter": "ঐ", "word": "ঐরাবত", "rhyme": "ঐ দেখ ভাই চাঁদ উঠেছে", "imagePath": "assets/images/vowel_oi_oirabot.png", "audioPath": "audio/oi_word.mp3", "themeColor": "#5E35B1", "cardColor": "#EDE7F6" },
       { "letter": "ও", "word": "ওল", "rhyme": "ওল খেয়ো না ধরবে গলা", "imagePath": "assets/images/vowel_o_ol.png", "audioPath": "audio/o_vowel_word.mp3", "themeColor": "#8E24AA", "cardColor": "#F3E5F5" },
       { "letter": "ঔ", "word": "ঔষধ", "rhyme": "ঔষধ খেতে মিছে বলা", "imagePath": "assets/images/vowel_ou_oushodh.png", "audioPath": "audio/ou_word.mp3", "themeColor": "#D81B60", "cardColor": "#FCE4EC" }
+    ],
+    categories: [
+      {
+        "id": "bangla",
+        "title": "বাংলা",
+        "letters": "অ আ",
+        "imagePath": "assets/images/baby_bangla.png",
+        "gradientColors": ["#22C55E", "#15803D"],
+        "shadowColor": "#3322C55E",
+        "routePath": "/bangla",
+        "voiceKey": "bangla_tab",
+        "voicePrompt": "বাংলা শিখতে এখানে চাপ দাও।",
+        "introText": "এসো বাংলা শিখি! স্বরবর্ণ, ব্যঞ্জনবর্ণ ও শব্দ শিখতে নিচে চাপ দাও।",
+        "audioPath": "audio/bangla_intro.mp3"
+      },
+      {
+        "id": "english",
+        "title": "ইংরেজি",
+        "letters": "A B",
+        "imagePath": "assets/images/baby_english.png",
+        "gradientColors": ["#3B82F6", "#1D4ED8"],
+        "shadowColor": "#333B82F6",
+        "routePath": "/english",
+        "voiceKey": "english_tab",
+        "voicePrompt": "ইংরেজি শিখতে এখানে চাপ দাও।",
+        "introText": "এসো ইংরেজি শিখি!",
+        "audioPath": "audio/english_intro.mp3"
+      },
+      {
+        "id": "math",
+        "title": "অংক",
+        "letters": "+ −",
+        "imagePath": "assets/images/baby_math.png",
+        "gradientColors": ["#8B5CF6", "#6D28D9"],
+        "shadowColor": "#338B5CF6",
+        "routePath": "/math-tab",
+        "voiceKey": "math_tab",
+        "voicePrompt": "অংক শিখতে এখানে চাপ দাও।",
+        "introText": "এসো অংক শিখি!",
+        "audioPath": "audio/math_intro.mp3"
+      },
+      {
+        "id": "arabic",
+        "title": "আরবী",
+        "letters": "ا ب",
+        "imagePath": "assets/images/baby_arabic.png",
+        "gradientColors": ["#F59E0B", "#D97706"],
+        "shadowColor": "#33F59E0B",
+        "routePath": "/arabic",
+        "voiceKey": "arabic_tab",
+        "voicePrompt": "আরবী শিখতে এখানে চাপ দাও।",
+        "introText": "এসো আরবী শিখি!",
+        "audioPath": "audio/arabic_intro.mp3"
+      },
+      {
+        "id": "rhymeBangla",
+        "title": "ছড়া-বাংলা",
+        "letters": "ছ ড়",
+        "imagePath": "assets/images/baby_rhyme_bn.png",
+        "gradientColors": ["#8B5CF6", "#6D28D9"],
+        "shadowColor": "#338B5CF6",
+        "routePath": "/bangla-rhymes",
+        "voiceKey": "rhymes_bn_tab",
+        "voicePrompt": "বাংলা ছড়া শিখতে এখানে চাপ দাও।",
+        "introText": "এসো বাংলা ছড়া শিখি!",
+        "audioPath": "audio/rhymes_bn_intro.mp3"
+      },
+      {
+        "id": "rhymeEnglish",
+        "title": "ছড়া ইংরেজি",
+        "letters": "R H",
+        "imagePath": "assets/images/baby_rhyme_bn.png",
+        "gradientColors": ["#3B82F6", "#1D4ED8"],
+        "shadowColor": "#333B82F6",
+        "routePath": "/english-rhymes",
+        "voiceKey": "rhymes_en_tab",
+        "voicePrompt": "ইংরেজি ছড়া শিখতে এখানে চাপ দাও।",
+        "introText": "এসো ইংরেজি ছড়া শিখি!",
+        "audioPath": "audio/rhymes_en_intro.mp3"
+      },
+      {
+        "id": "story",
+        "title": "গল্প",
+        "letters": "গ ল",
+        "imagePath": "assets/images/baby_rhyme_bn.png",
+        "gradientColors": ["#F59E0B", "#D97706"],
+        "shadowColor": "#33F59E0B",
+        "routePath": "/stories",
+        "voiceKey": "stories_tab",
+        "voicePrompt": "মজার গল্প শুনতে এখানে চাপ দাও।",
+        "introText": "এসো মজার গল্প শিখি!",
+        "audioPath": "audio/stories_intro.mp3"
+      },
+      {
+        "id": "game",
+        "title": "গেম",
+        "letters": "G M",
+        "imagePath": "assets/images/baby_english.png",
+        "gradientColors": ["#22C55E", "#15803D"],
+        "shadowColor": "#3322C55E",
+        "routePath": "/games",
+        "voiceKey": "games_tab",
+        "voicePrompt": "মজার গেম খেলতে এখানে চাপ দাও।",
+        "introText": "এসো মজার গেম খেলি!",
+        "audioPath": "audio/games_intro.mp3"
+      },
+      {
+        "id": "food",
+        "title": "খাবারের নাম",
+        "letters": "খ া",
+        "imagePath": "assets/images/baby_math.png",
+        "gradientColors": ["#EF5350", "#C62828"],
+        "shadowColor": "#33EF5350",
+        "routePath": "/foods",
+        "voiceKey": "foods_tab",
+        "voicePrompt": "খাবারের নাম শিখতে এখানে চাপ দাও।",
+        "introText": "এসো সুস্বাদু খাবারের নাম শিখি!",
+        "audioPath": "audio/foods_intro.mp3"
+      },
+      {
+        "id": "fruit",
+        "title": "ফলের নাম",
+        "letters": "ফ ল",
+        "imagePath": "assets/images/baby_math.png",
+        "gradientColors": ["#009688", "#00695C"],
+        "shadowColor": "#33009688",
+        "routePath": "/fruits",
+        "voiceKey": "fruits_tab",
+        "voicePrompt": "ফলের নাম শিখতে এখানে চাপ দাও।",
+        "introText": "এসো সুস্বাদু ফলের নাম শিখি!",
+        "audioPath": "audio/fruits_intro.mp3"
+      },
+      {
+        "id": "flower",
+        "title": "ফুলের নাম",
+        "letters": "ফ ু",
+        "imagePath": "assets/images/baby_bangla.png",
+        "gradientColors": ["#EC407A", "#AD1457"],
+        "shadowColor": "#33EC407A",
+        "routePath": "/flowers",
+        "voiceKey": "flowers_tab",
+        "voicePrompt": "ফুলের নাম শিখতে এখানে চাপ দাও।",
+        "introText": "এসো সুন্দর ফুলের নাম শিখি!",
+        "audioPath": "audio/flowers_intro.mp3"
+      },
+      {
+        "id": "monthsBangla",
+        "title": "১২ মাসের নাম",
+        "letters": "১ ২",
+        "imagePath": "assets/images/baby_bangla.png",
+        "gradientColors": ["#00ACC1", "#00838F"],
+        "shadowColor": "#3300ACC1",
+        "routePath": "/months-bn",
+        "voiceKey": "months_bn_tab",
+        "voicePrompt": "১২ মাসের নাম শিখতে এখানে চাপ দাও।",
+        "introText": "এসো বাংলা ১২ মাসের নাম শিখি!",
+        "audioPath": "audio/months_bn_intro.mp3"
+      },
+      {
+        "id": "monthsEnglish",
+        "title": "ইংরেজি ১২ মাসের নাম",
+        "letters": "J F",
+        "imagePath": "assets/images/baby_rhyme_bn.png",
+        "gradientColors": ["#3F51B5", "#283593"],
+        "shadowColor": "#333F51B5",
+        "routePath": "/months-en",
+        "voiceKey": "months_en_tab",
+        "voicePrompt": "ইংরেজি ১২ মাসের নাম শিখতে এখানে চাপ দাও।",
+        "introText": "এসো ইংরেজি ১২ মাসের নাম শিখি!",
+        "audioPath": "audio/months_en_intro.mp3"
+      },
+      {
+        "id": "daysBangla",
+        "title": "বারের নাম",
+        "letters": "শ ন",
+        "imagePath": "assets/images/baby_english.png",
+        "gradientColors": ["#FFB300", "#FF8F00"],
+        "shadowColor": "#33FFB300",
+        "routePath": "/days-bn",
+        "voiceKey": "days_bn_tab",
+        "voicePrompt": "সাত দিনের নাম শিখতে এখানে চাপ দাও।",
+        "introText": "এসো বাংলা সাত দিনের নাম শিখি!",
+        "audioPath": "audio/days_bn_intro.mp3"
+      },
+      {
+        "id": "daysEnglish",
+        "title": "ইংরেজি বারের নাম",
+        "letters": "S M",
+        "imagePath": "assets/images/baby_arabic.png",
+        "gradientColors": ["#8BC34A", "#558B2F"],
+        "shadowColor": "#338BC34A",
+        "routePath": "/days-en",
+        "voiceKey": "days_en_tab",
+        "voicePrompt": "ইংরেজি সাত দিনের নাম শিখতে এখানে চাপ দাও।",
+        "introText": "এসো ইংরেজি সাত দিনের নাম শিখি!",
+        "audioPath": "audio/days_en_intro.mp3"
+      }
+    ],
+    consonant_words: [
+      { "letter": "ক", "word": "কাকাতুয়া", "rhyme": "কাকাতুয়াটির মাথায় ঝুঁটি।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#EF5350", "cardColor": "#FFFFEBEE" },
+      { "letter": "খ", "word": "খরগোশ", "rhyme": "খরগোশটি লাফিয়ে চলে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#FB8C00", "cardColor": "#FFF3E0" },
+      { "letter": "গ", "word": "গরু", "rhyme": "গরুটি মাঠের ঘাস খায়।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#FBC02D", "cardColor": "#FFFDE7" },
+      { "letter": "ঘ", "word": "ঘুড়ি", "rhyme": "ঘুড়ি ওড়ে আকাশ জুড়ে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#7CB342", "cardColor": "#F1F8E9" },
+      { "letter": "ঙ", "word": "ব্যাঙ", "rhyme": "ব্যাঙ ডাকে মেঘের ডাকে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#00897B", "cardColor": "#E0F2F1" },
+      { "letter": "চ", "word": "চশমা", "rhyme": "চশমা রাখি চোখের পরে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#00ACC1", "cardColor": "#E0F7FA" },
+      { "letter": "ছ", "word": "ছাতা", "rhyme": "ছাতা ধরো মাথায় দিয়ে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#039BE5", "cardColor": "#E1F5FE" },
+      { "letter": "জ", "word": "জাহাজ", "rhyme": "জাহাজ চলে সাগর জলে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#3949AB", "cardColor": "#E8EAF6" },
+      { "letter": "ঝ", "word": "ঝরনা", "rhyme": "ঝরনা বয় পাহাড় ঘেঁষে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#8E24AA", "cardColor": "#F3E5F5" },
+      { "letter": "ঞ", "word": "মিঞা", "rhyme": "মিঞা ভাইয়ের দাড়ি গালে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#D81B60", "cardColor": "#FCE4EC" },
+      { "letter": "ট", "word": "টিয়া", "rhyme": "টিয়া পাখির ঠোঁটটি লাল।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#EF5350", "cardColor": "#FFFFEBEE" },
+      { "letter": "ঠ", "word": "ঠাকুরদা", "rhyme": "ঠাকুরদাদার শুকনো গাল।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#FB8C00", "cardColor": "#FFF3E0" },
+      { "letter": "ড", "word": "ডাব", "rhyme": "ডাব পেড়ে খাই তৃষ্ণা পেলে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#FBC02D", "cardColor": "#FFFDE7" },
+      { "letter": "ঢ", "word": "ঢোল", "rhyme": "ঢোল বাজিয়ে গান গাই।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#7CB342", "cardColor": "#F1F8E9" },
+      { "letter": "ণ", "word": "হরিণ", "rhyme": "হরিণ থাকে বনের মাঝে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#00897B", "cardColor": "#E0F2F1" },
+      { "letter": "ত", "word": "তিমি", "rhyme": "তিমি আপন শিকার ধরে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#00ACC1", "cardColor": "#E0F7FA" },
+      { "letter": "থ", "word": "থালা", "rhyme": "থালা ভরা মিঠাই আছে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#039BE5", "cardColor": "#E1F5FE" },
+      { "letter": "দ", "word": "দোয়েল", "rhyme": "দোয়েল পাখি মিষ্টি গায়।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#3949AB", "cardColor": "#E8EAF6" },
+      { "letter": "ধ", "word": "ধান", "rhyme": "ধান ফলেছে মাঠের মাঝে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#8E24AA", "cardColor": "#F3E5F5" },
+      { "letter": "ন", "word": "নৌকা", "rhyme": "নৌকা চলে নদীর জলে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#D81B60", "cardColor": "#FCE4EC" },
+      { "letter": "প", "word": "পাখি", "rhyme": "পাখি ওড়ে নীল আকাশে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#EF5350", "cardColor": "#FFFFEBEE" },
+      { "letter": "ফ", "word": "ফড়িং", "rhyme": "ফড়িং নাচে ঘাসের পরে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#FB8C00", "cardColor": "#FFF3E0" },
+      { "letter": "ব", "word": "বই", "rhyme": "বই পড়লে জ্ঞান বাড়ে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#FBC02D", "cardColor": "#FFFDE7" },
+      { "letter": "ভ", "word": "ভালুক", "rhyme": "ভালুক নাচে বনের মাঝে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#7CB342", "cardColor": "#F1F8E9" },
+      { "letter": "ম", "word": "ময়ূর", "rhyme": "ময়ূর নাচে পেখম তুলে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#00897B", "cardColor": "#E0F2F1" },
+      { "letter": "য", "word": "যাতা", "rhyme": "যাতা ঘোরে হাতের জোরে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#00ACC1", "cardColor": "#E0F7FA" },
+      { "letter": "র", "word": "রথ", "rhyme": "রথ টানে মেলাতে গিয়ে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#039BE5", "cardColor": "#E1F5FE" },
+      { "letter": "ল", "word": "লাটিম", "rhyme": "লাটিম ঘোরে বনবনিয়ে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#3949AB", "cardColor": "#E8EAF6" },
+      { "letter": "শ", "word": "শাপলা", "rhyme": "শাপলা ফোটে দিঘির জলে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#8E24AA", "cardColor": "#F3E5F5" },
+      { "letter": "ষ", "word": "ষাঁড়", "rhyme": "ষাঁড় গুতোয় রেগে মেগে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#D81B60", "cardColor": "#FCE4EC" },
+      { "letter": "স", "word": "সিংহ", "rhyme": "সিংহ হলো বনের রাজা।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#EF5350", "cardColor": "#FFFFEBEE" },
+      { "letter": "হ", "word": "হাতি", "rhyme": "হাতি চলে দুলে দুলে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#FB8C00", "cardColor": "#FFF3E0" },
+      { "letter": "ড়", "word": "পাহাড়", "rhyme": "পাহাড় চূড়া মেঘের দেশে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#FBC02D", "cardColor": "#FFFDE7" },
+      { "letter": "ঢ়", "word": "আষাঢ়", "rhyme": "আষাঢ় মাসে বাদল নামে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#7CB342", "cardColor": "#F1F8E9" },
+      { "letter": "য়", "word": "ময়না", "rhyme": "ময়না পাখি কথা কয়।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#00897B", "cardColor": "#E0F2F1" },
+      { "letter": "ৎ", "word": "মৎস্য", "rhyme": "মৎস্য থাকে জলের তলে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#00ACC1", "cardColor": "#E0F7FA" },
+      { "letter": "ং", "word": "সং", "rhyme": "সং সেজেছে মজার বেশে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#039BE5", "cardColor": "#E1F5FE" },
+      { "letter": "ঃ", "word": "দুঃখ", "rhyme": "দুঃখ ভুলে হাসো আবার।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#3949AB", "cardColor": "#E8EAF6" },
+      { "letter": "ঁ", "word": "চাঁদ", "rhyme": "চাঁদ উঠেছে নীল আকাশে।", "imagePath": "assets/images/consonant_words.png", "audioPath": "", "themeColor": "#8E24AA", "cardColor": "#F3E5F5" }
     ],
     settings: {
       "welcomeText": "বই পড়ি অ্যাপে স্বাগতম! পড়ার ক্যাটাগরি বেছে নিতে নিচের যেকোনো একটি বড় বাটনে চাপ দাও।",
