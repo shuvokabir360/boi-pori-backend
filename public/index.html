@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>বই পড়ি - এডমিন ড্যাশবোর্ড</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --success: #10b981;
+      --danger: #ef4444;
+      --indigo: #6366f1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', 'Hind Siliguri', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo-section h1 {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-section span {
+      background: linear-gradient(135deg, #60a5fa, #2563eb);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .stats-container {
+      display: flex;
+      gap: 20px;
+    }
+
+    .stat-badge {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 15px;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 18px;
+      font-weight: 700;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .tab-btn.active {
+      color: #fff;
+      background: var(--primary);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-preview {
+      width: 100px;
+      height: 100px;
+      border-radius: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 48px;
+      font-weight: 900;
+      margin-bottom: 20px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .word-image-preview {
+      width: 100%;
+      height: 120px;
+      background: #f8fafc;
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .word-image-preview img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .word-image-preview .placeholder-icon {
+      font-size: 40px;
+      color: #94a3b8;
+    }
+
+    .card-info {
+      text-align: center;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .card-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .audio-player-container {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .play-audio-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      color: var(--text);
+      transition: background 0.2s;
+    }
+
+    .play-audio-btn:hover {
+      background: var(--primary);
+    }
+
+    .play-audio-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    .edit-btn {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 10px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .edit-btn:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    /* Modal Styling */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(8px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 100;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      width: 90%;
+      max-width: 550px;
+      border-radius: 24px;
+      padding: 30px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.active .modal {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .modal-header h3 {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .close-modal-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .form-control {
+      width: 100%;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      color: var(--text);
+      font-size: 16px;
+      font-family: inherit;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .color-pickers {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .color-picker-input {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px 12px;
+    }
+
+    .color-picker-input input[type="color"] {
+      border: none;
+      background: none;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+    }
+
+    .file-upload-zone {
+      border: 2px dashed var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .file-upload-zone:hover {
+      border-color: var(--primary);
+    }
+
+    .file-upload-zone p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .reset-btn-container {
+      margin-top: 60px;
+      text-align: center;
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+      border: 1px solid var(--danger);
+    }
+
+    .btn-danger:hover {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo-section">
+      <h1>বই পড়ি <span>এডমিন প্যানেল</span></h1>
+    </div>
+    <div class="stats-container">
+      <div class="stat-badge" id="vowel-count">স্বরবর্ণ: --</div>
+      <div class="stat-badge" id="consonant-count">ব্যঞ্জনবর্ণ: --</div>
+      <div class="stat-badge" id="word-count">শব্দ: --</div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('vowels')">স্বরবর্ণ (Vowels)</button>
+      <button class="tab-btn" onclick="switchTab('consonants')">ব্যঞ্জনবর্ণ (Consonants)</button>
+      <button class="tab-btn" onclick="switchTab('words')">শব্দ শিখন (Vowel Words)</button>
+      <button class="tab-btn" onclick="switchTab('settings')">অ্যাপ সেটিংস (App Settings)</button>
+    </div>
+
+    <!-- Vowels Tab Content -->
+    <div id="vowels-content" class="tab-content active">
+      <div class="grid-container" id="vowels-grid"></div>
+    </div>
+
+    <!-- Consonants Tab Content -->
+    <div id="consonants-content" class="tab-content">
+      <div class="grid-container" id="consonants-grid"></div>
+    </div>
+
+    <!-- Vowel Words Tab Content -->
+    <div id="words-content" class="tab-content">
+      <div class="grid-container" id="words-grid"></div>
+    </div>
+
+    <!-- Settings Tab Content -->
+    <div id="settings-content" class="tab-content">
+      <div style="max-width: 600px; margin: 0 auto; background: var(--surface); border: 1px solid var(--border); padding: 30px; border-radius: 20px;">
+        <h2 style="margin-bottom: 24px; font-weight: 800; font-size: 20px;">অ্যাপ খোলার স্বাগত বক্তব্য ও ভয়েস পরিবর্তন</h2>
+        <form id="settings-form" onsubmit="saveSettings(event)">
+          <div class="form-group">
+            <label>অ্যাপ খোলার স্বাগত বক্তব্য (Welcome Text)</label>
+            <textarea id="settings-welcome-text" class="form-control" rows="3" style="font-family: inherit; resize: vertical;"></textarea>
+          </div>
+          <div class="form-group">
+            <label>স্বাগত বক্তব্যের কাস্টম ভয়েস ফাইল আপলোড (.mp3)</label>
+            <input type="file" id="settings-welcome-audio-file" accept="audio/mp3,audio/*" style="display:none" onchange="uploadFile(this, 'settings-welcome-audio-url')">
+            <div class="file-upload-zone" onclick="document.getElementById('settings-welcome-audio-file').click()">
+              <p id="settings-welcome-audio-filename">স্বাগত বক্তব্যের ভয়েস আপলোড করতে এখানে ক্লিক করুন</p>
+            </div>
+            <input type="hidden" id="settings-welcome-audio-url">
+          </div>
+          <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
+          <div class="form-group">
+            <label>বাংলা স্ক্রিন শুরুর স্বাগত বক্তব্য (Bangla Intro Text)</label>
+            <textarea id="settings-bangla-text" class="form-control" rows="3" style="font-family: inherit; resize: vertical;"></textarea>
+          </div>
+          <div class="form-group">
+            <label>বাংলা স্ক্রিন শুরুর কাস্টম ভয়েস ফাইল আপলোড (.mp3)</label>
+            <input type="file" id="settings-bangla-audio-file" accept="audio/mp3,audio/*" style="display:none" onchange="uploadFile(this, 'settings-bangla-audio-url')">
+            <div class="file-upload-zone" onclick="document.getElementById('settings-bangla-audio-file').click()">
+              <p id="settings-bangla-audio-filename">বাংলা স্ক্রিনের ভয়েস আপলোড করতে এখানে ক্লিক করুন</p>
+            </div>
+            <input type="hidden" id="settings-bangla-audio-url">
+          </div>
+          <div style="margin-top: 30px;">
+            <button type="submit" class="btn btn-primary" style="width: 100%;">সেটিংস সংরক্ষণ করুন</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Reset Data Button -->
+    <div class="reset-btn-container">
+      <button class="btn btn-danger" onclick="resetDatabase()">ফ্যাক্টরি রিসেট (পুনরায় মূল অ্যাপ ডাটায় ফেরত যান)</button>
+    </div>
+  </div>
+
+  <!-- Edit Vowel Modal -->
+  <div class="modal-overlay" id="vowel-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>স্বরবর্ণ সম্পাদন</h3>
+        <button class="close-modal-btn" onclick="closeModal('vowel-modal')">&times;</button>
+      </div>
+      <form id="vowel-form" onsubmit="saveVowel(event)">
+        <input type="hidden" id="vowel-char">
+        <div class="form-group">
+          <label>বর্ণমালা (অক্ষর)</label>
+          <input type="text" id="vowel-char-display" class="form-control" disabled>
+        </div>
+        <div class="form-group">
+          <label>উচ্চারণ (Voice Synthesis Text)</label>
+          <input type="text" id="vowel-pron" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>কার্ডের ডিজাইন কালার</label>
+          <div class="color-pickers">
+            <div class="color-picker-input">
+              <input type="color" id="vowel-text-color">
+              <span>টেক্সট কালার</span>
+            </div>
+            <div class="color-picker-input">
+              <input type="color" id="vowel-card-color">
+              <span>কার্ড ব্যাকগ্রাউন্ড</span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>কাস্টম ভয়েস ফাইল আপলোড (.mp3)</label>
+          <input type="file" id="vowel-audio-file" accept="audio/mp3,audio/*" style="display:none" onchange="uploadFile(this, 'vowel-audio-url')">
+          <div class="file-upload-zone" onclick="document.getElementById('vowel-audio-file').click()">
+            <p id="vowel-audio-filename">ভয়েস আপলোড করতে এখানে ক্লিক করুন</p>
+          </div>
+          <input type="hidden" id="vowel-audio-url">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('vowel-modal')">বাতিল</button>
+          <button type="submit" class="btn btn-primary">সংরক্ষণ করুন</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Consonant Modal -->
+  <div class="modal-overlay" id="consonant-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>ব্যঞ্জনবর্ণ সম্পাদন</h3>
+        <button class="close-modal-btn" onclick="closeModal('consonant-modal')">&times;</button>
+      </div>
+      <form id="consonant-form" onsubmit="saveConsonant(event)">
+        <input type="hidden" id="consonant-char">
+        <div class="form-group">
+          <label>বর্ণমালা (অক্ষর)</label>
+          <input type="text" id="consonant-char-display" class="form-control" disabled>
+        </div>
+        <div class="form-group">
+          <label>কার্ডের ডিজাইন কালার</label>
+          <div class="color-pickers">
+            <div class="color-picker-input">
+              <input type="color" id="consonant-text-color">
+              <span>টেক্সট কালার</span>
+            </div>
+            <div class="color-picker-input">
+              <input type="color" id="consonant-card-color">
+              <span>কার্ড ব্যাকগ্রাউন্ড</span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>কাস্টম ভয়েস ফাইল আপলোড (.mp3)</label>
+          <input type="file" id="consonant-audio-file" accept="audio/mp3,audio/*" style="display:none" onchange="uploadFile(this, 'consonant-audio-url')">
+          <div class="file-upload-zone" onclick="document.getElementById('consonant-audio-file').click()">
+            <p id="consonant-audio-filename">ভয়েস আপলোড করতে এখানে ক্লিক করুন</p>
+          </div>
+          <input type="hidden" id="consonant-audio-url">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('consonant-modal')">বাতিল</button>
+          <button type="submit" class="btn btn-primary">সংরক্ষণ করুন</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Word Modal -->
+  <div class="modal-overlay" id="word-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>শব্দ শিখন সম্পাদন</h3>
+        <button class="close-modal-btn" onclick="closeModal('word-modal')">&times;</button>
+      </div>
+      <form id="word-form" onsubmit="saveWord(event)">
+        <input type="hidden" id="word-letter">
+        <div class="form-group">
+          <label>মূল স্বরবর্ণ</label>
+          <input type="text" id="word-letter-display" class="form-control" disabled>
+        </div>
+        <div class="form-group">
+          <label>তৈরিকৃত শব্দ</label>
+          <input type="text" id="word-title" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>ছড়া বা বাক্য</label>
+          <input type="text" id="word-rhyme" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>কার্ডের ডিজাইন কালার</label>
+          <div class="color-pickers">
+            <div class="color-picker-input">
+              <input type="color" id="word-theme-color">
+              <span>থিম কালার</span>
+            </div>
+            <div class="color-picker-input">
+              <input type="color" id="word-card-color">
+              <span>কার্ড ব্যাকগ্রাউন্ড</span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>কাস্টম ছবি আপলোড (Image File)</label>
+          <input type="file" id="word-image-file" accept="image/*" style="display:none" onchange="uploadFile(this, 'word-image-url')">
+          <div class="file-upload-zone" onclick="document.getElementById('word-image-file').click()">
+            <p id="word-image-filename">কার্টুন ছবি আপলোড করতে এখানে ক্লিক করুন</p>
+          </div>
+          <input type="hidden" id="word-image-url">
+        </div>
+        <div class="form-group">
+          <label>কাস্টম শব্দ ভয়েস আপলোড (.mp3)</label>
+          <input type="file" id="word-audio-file" accept="audio/mp3,audio/*" style="display:none" onchange="uploadFile(this, 'word-audio-url')">
+          <div class="file-upload-zone" onclick="document.getElementById('word-audio-file').click()">
+            <p id="word-audio-filename">শব্দের সম্পূর্ণ ভয়েস আপলোড করতে এখানে ক্লিক করুন</p>
+          </div>
+          <input type="hidden" id="word-audio-url">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('word-modal')">বাতিল</button>
+          <button type="submit" class="btn btn-primary">সংরক্ষণ করুন</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <audio id="global-audio-player"></audio>
+
+  <script>
+    const API_URL = `${window.location.origin}/api`;
+    
+    let currentVowels = [];
+    let currentConsonants = [];
+    let currentWords = [];
+
+    // On Load
+    window.addEventListener('DOMContentLoaded', () => {
+      fetchData();
+    });
+
+    function fetchData() {
+      Promise.all([
+        fetch(`${API_URL}/vowels`).then(r => r.json()),
+        fetch(`${API_URL}/consonants`).then(r => r.json()),
+        fetch(`${API_URL}/words`).then(r => r.json()),
+        fetch(`${API_URL}/settings`).then(r => r.json())
+      ]).then(([vowels, consonants, words, settings]) => {
+        currentVowels = vowels;
+        currentConsonants = consonants;
+        currentWords = words;
+
+        updateStats();
+        renderVowels();
+        renderConsonants();
+        renderWords();
+        populateSettings(settings);
+      }).catch(err => {
+        alert('সার্ভার থেকে ডাটা লোড করতে ব্যর্থ হয়েছে। দয়া করে নিশ্চিত করুন যে সার্ভারটি চালু আছে।');
+        console.error(err);
+      });
+    }
+
+    function populateSettings(settings) {
+      if (!settings) return;
+      document.getElementById('settings-welcome-text').value = settings.welcomeText || '';
+      document.getElementById('settings-welcome-audio-url').value = settings.welcomeAudioPath || '';
+      
+      const welcomeFileLabel = document.getElementById('settings-welcome-audio-filename');
+      if (settings.welcomeAudioPath && settings.welcomeAudioPath.startsWith('http')) {
+        welcomeFileLabel.textContent = 'কাস্টম ভয়েস আপলোড আছে';
+        welcomeFileLabel.style.color = 'var(--success)';
+      } else {
+        welcomeFileLabel.textContent = 'স্বাগত বক্তব্যের ভয়েস আপলোড করতে এখানে ক্লিক করুন';
+        welcomeFileLabel.style.color = 'var(--text-muted)';
+      }
+
+      document.getElementById('settings-bangla-text').value = settings.banglaIntroText || '';
+      document.getElementById('settings-bangla-audio-url').value = settings.banglaIntroAudioPath || '';
+      
+      const banglaFileLabel = document.getElementById('settings-bangla-audio-filename');
+      if (settings.banglaIntroAudioPath && settings.banglaIntroAudioPath.startsWith('http')) {
+        banglaFileLabel.textContent = 'কাস্টম ভয়েস আপলোড আছে';
+        banglaFileLabel.style.color = 'var(--success)';
+      } else {
+        banglaFileLabel.textContent = 'বাংলা স্ক্রিনের ভয়েস আপলোড করতে এখানে ক্লিক করুন';
+        banglaFileLabel.style.color = 'var(--text-muted)';
+      }
+    }
+
+    function updateStats() {
+      document.getElementById('vowel-count').textContent = `স্বরবর্ণ: ${currentVowels.length}`;
+      document.getElementById('consonant-count').textContent = `ব্যঞ্জনবর্ণ: ${currentConsonants.length}`;
+      document.getElementById('word-count').textContent = `শব্দ: ${currentWords.length}`;
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+      event.target.classList.add('active');
+      document.getElementById(`${tabId}-content`).classList.add('active');
+    }
+
+    // Play Audio Helper
+    function playAudio(path) {
+      const audio = document.getElementById('global-audio-player');
+      
+      // Check if it's a relative asset or external URL
+      if (path.startsWith('http://') || path.startsWith('https://')) {
+        audio.src = path;
+      } else {
+        // Mock default audio path for local flutter assets
+        alert(`স্থানীয় সম্পদ ফাইল: "${path}" - এটি শুধুমাত্র মোবাইলের ভেতরে কাজ করবে। যদি কাস্টম ভয়েস আপলোড করেন তবে তা এখান থেকে শুনতে পাবেন।`);
+        return;
+      }
+      audio.play().catch(e => console.error("Error playing audio:", e));
+    }
+
+    // -------------------------------- RENDERING --------------------------------
+
+    function renderVowels() {
+      const container = document.getElementById('vowels-grid');
+      container.innerHTML = '';
+      currentVowels.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="card-preview" style="color: ${item.textColor}; background-color: ${item.cardColor};">
+            ${item.char}
+          </div>
+          <div class="card-info">
+            <div class="card-title">${item.char}</div>
+            <div class="card-subtitle">উচ্চারণ: ${item.pronunciation}</div>
+            <div class="audio-player-container">
+              <span>সাউন্ড ফাইল:</span>
+              <button class="play-audio-btn" onclick="playAudio('${item.audioPath}')" title="Play">
+                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+            </div>
+          </div>
+          <button class="edit-btn" onclick="openEditVowel(${index})">সম্পাদন করুন</button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderConsonants() {
+      const container = document.getElementById('consonants-grid');
+      container.innerHTML = '';
+      currentConsonants.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="card-preview" style="color: ${item.textColor}; background-color: ${item.cardColor};">
+            ${item.char}
+          </div>
+          <div class="card-info">
+            <div class="card-title">${item.char}</div>
+            <div class="audio-player-container">
+              <span>সাউন্ড ফাইল:</span>
+              <button class="play-audio-btn" onclick="playAudio('${item.audioPath}')" title="Play">
+                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+            </div>
+          </div>
+          <button class="edit-btn" onclick="openEditConsonant(${index})">সম্পাদন করুন</button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderWords() {
+      const container = document.getElementById('words-grid');
+      container.innerHTML = '';
+      currentWords.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        
+        let imageHTML = `<div class="placeholder-icon">🖼️</div>`;
+        if (item.imagePath) {
+          if (item.imagePath.startsWith('http://') || item.imagePath.startsWith('https://')) {
+            imageHTML = `<img src="${item.imagePath}" alt="${item.word}">`;
+          } else {
+            // Local asset
+            imageHTML = `<div style="font-size:12px;color:var(--text-muted);text-align:center;padding:10px;">মোবাইল অ্যাসেট:<br>${item.imagePath.split('/').pop()}</div>`;
+          }
+        }
+
+        card.innerHTML = `
+          <div class="word-image-preview">
+            ${imageHTML}
+          </div>
+          <div class="card-info">
+            <div class="card-title" style="color: ${item.themeColor};">${item.letter} -তে ${item.word}</div>
+            <div class="card-subtitle" style="font-weight:600;">ছড়া: "${item.rhyme}"</div>
+            <div class="audio-player-container">
+              <span>শব্দ সাউন্ড:</span>
+              <button class="play-audio-btn" onclick="playAudio('${item.audioPath}')" title="Play">
+                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+            </div>
+          </div>
+          <button class="edit-btn" onclick="openEditWord(${index})">সম্পাদন করুন</button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // -------------------------------- MODAL & UPLOAD --------------------------------
+
+    function openModal(id) {
+      document.getElementById(id).classList.add('active');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+
+    function uploadFile(inputElement, targetUrlId) {
+      const file = inputElement.files[0];
+      if (!file) return;
+
+      const filenameLabel = inputElement.nextElementSibling.querySelector('p');
+      filenameLabel.textContent = `আপলোড হচ্ছে: ${file.name}...`;
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      fetch(`${API_URL}/upload`, {
+        method: 'POST',
+        body: formData
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.url) {
+          document.getElementById(targetUrlId).value = data.url;
+          filenameLabel.textContent = `সফলভাবে আপলোড হয়েছে: ${file.name}`;
+          filenameLabel.style.color = 'var(--success)';
+        } else {
+          filenameLabel.textContent = `আপলোড ব্যর্থ হয়েছে`;
+          filenameLabel.style.color = 'var(--danger)';
+        }
+      })
+      .catch(err => {
+        filenameLabel.textContent = `আপলোড ত্রুটি`;
+        filenameLabel.style.color = 'var(--danger)';
+        console.error(err);
+      });
+    }
+
+    // -------------------------------- EDIT OPERATIONS --------------------------------
+
+    function openEditVowel(index) {
+      const item = currentVowels[index];
+      document.getElementById('vowel-char').value = item.char;
+      document.getElementById('vowel-char-display').value = item.char;
+      document.getElementById('vowel-pron').value = item.pronunciation;
+      document.getElementById('vowel-text-color').value = item.textColor;
+      document.getElementById('vowel-card-color').value = item.cardColor;
+      document.getElementById('vowel-audio-url').value = item.audioPath;
+      document.getElementById('vowel-audio-filename').textContent = item.audioPath.startsWith('http') ? 'কাস্টম ভয়েস আপলোড আছে' : 'ভয়েস আপলোড করতে এখানে ক্লিক করুন';
+      document.getElementById('vowel-audio-filename').style.color = item.audioPath.startsWith('http') ? 'var(--success)' : 'var(--text-muted)';
+      openModal('vowel-modal');
+    }
+
+    function saveVowel(e) {
+      e.preventDefault();
+      const payload = {
+        char: document.getElementById('vowel-char').value,
+        pronunciation: document.getElementById('vowel-pron').value,
+        textColor: document.getElementById('vowel-text-color').value,
+        cardColor: document.getElementById('vowel-card-color').value,
+        audioPath: document.getElementById('vowel-audio-url').value
+      };
+
+      fetch(`${API_URL}/vowels/update`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          closeModal('vowel-modal');
+          fetchData();
+        }
+      });
+    }
+
+    function openEditConsonant(index) {
+      const item = currentConsonants[index];
+      document.getElementById('consonant-char').value = item.char;
+      document.getElementById('consonant-char-display').value = item.char;
+      document.getElementById('consonant-text-color').value = item.textColor;
+      document.getElementById('consonant-card-color').value = item.cardColor;
+      document.getElementById('consonant-audio-url').value = item.audioPath;
+      document.getElementById('consonant-audio-filename').textContent = item.audioPath.startsWith('http') ? 'কাস্টম ভয়েস আপলোড আছে' : 'ভয়েস আপলোড করতে এখানে ক্লিক করুন';
+      document.getElementById('consonant-audio-filename').style.color = item.audioPath.startsWith('http') ? 'var(--success)' : 'var(--text-muted)';
+      openModal('consonant-modal');
+    }
+
+    function saveConsonant(e) {
+      e.preventDefault();
+      const payload = {
+        char: document.getElementById('consonant-char').value,
+        textColor: document.getElementById('consonant-text-color').value,
+        cardColor: document.getElementById('consonant-card-color').value,
+        audioPath: document.getElementById('consonant-audio-url').value
+      };
+
+      fetch(`${API_URL}/consonants/update`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          closeModal('consonant-modal');
+          fetchData();
+        }
+      });
+    }
+
+    function openEditWord(index) {
+      const item = currentWords[index];
+      document.getElementById('word-letter').value = item.letter;
+      document.getElementById('word-letter-display').value = item.letter;
+      document.getElementById('word-title').value = item.word;
+      document.getElementById('word-rhyme').value = item.rhyme;
+      document.getElementById('word-theme-color').value = item.themeColor;
+      document.getElementById('word-card-color').value = item.cardColor;
+      document.getElementById('word-image-url').value = item.imagePath;
+      document.getElementById('word-audio-url').value = item.audioPath;
+
+      document.getElementById('word-image-filename').textContent = item.imagePath.startsWith('http') ? 'কাস্টম কার্টুন ছবি আপলোড আছে' : 'কার্টুন ছবি আপলোড করতে এখানে ক্লিক করুন';
+      document.getElementById('word-image-filename').style.color = item.imagePath.startsWith('http') ? 'var(--success)' : 'var(--text-muted)';
+      
+      document.getElementById('word-audio-filename').textContent = item.audioPath.startsWith('http') ? 'কাস্টম ভয়েস আপলোড আছে' : 'শব্দের সম্পূর্ণ ভয়েস আপলোড করতে এখানে ক্লিক করুন';
+      document.getElementById('word-audio-filename').style.color = item.audioPath.startsWith('http') ? 'var(--success)' : 'var(--text-muted)';
+      
+      openModal('word-modal');
+    }
+
+    function saveWord(e) {
+      e.preventDefault();
+      const payload = {
+        letter: document.getElementById('word-letter').value,
+        word: document.getElementById('word-title').value,
+        rhyme: document.getElementById('word-rhyme').value,
+        themeColor: document.getElementById('word-theme-color').value,
+        cardColor: document.getElementById('word-card-color').value,
+        imagePath: document.getElementById('word-image-url').value,
+        audioPath: document.getElementById('word-audio-url').value
+      };
+
+      fetch(`${API_URL}/words/update`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          closeModal('word-modal');
+          fetchData();
+        }
+      });
+    }
+
+    function saveSettings(e) {
+      e.preventDefault();
+      const payload = {
+        welcomeText: document.getElementById('settings-welcome-text').value,
+        welcomeAudioPath: document.getElementById('settings-welcome-audio-url').value,
+        banglaIntroText: document.getElementById('settings-bangla-text').value,
+        banglaIntroAudioPath: document.getElementById('settings-bangla-audio-url').value
+      };
+
+      fetch(`${API_URL}/settings/update`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          alert('অ্যাপ সেটিংস সফলভাবে সংরক্ষণ করা হয়েছে!');
+          fetchData();
+        }
+      });
+    }
+
+    function resetDatabase() {
+      if (confirm('আপনি কি নিশ্চিত যে আপনি ডাটাবেস রিসেট করে ডিফল্ট সেটিংসে ফিরে যেতে চান? আপনার তৈরি সব কাস্টম ফাইল ও পরিবর্তন মুছে যাবে।')) {
+        fetch(`${API_URL}/reset`, { method: 'POST' })
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            alert('ডাটাবেস সফলভাবে রিসেট করা হয়েছে!');
+            fetchData();
+          }
+        });
+      }
+    }
+  </script>
+</body>
+</html>
