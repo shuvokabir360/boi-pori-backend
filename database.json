@@ -452,6 +452,10 @@
     "welcomeText": "বই পড়ি অ্যাপে স্বাগতম! পড়ার ক্যাটাগরি বেছে নিতে নিচের যেকোনো একটি বড় বাটনে চাপ দাও।",
     "welcomeAudioPath": "audio/welcome.mp3",
     "banglaIntroText": "এসো বাংলা শিখি! স্বরবর্ণ, ব্যঞ্জনবর্ণ ও শব্দ শিখতে নিচে চাপ দাও।",
-    "banglaIntroAudioPath": "audio/bangla_intro.mp3"
+    "banglaIntroAudioPath": "audio/bangla_intro.mp3",
+    "vowelsIntroText": "এসো স্বরবর্ণ শিখি! যেকোনো একটি বর্ণে চাপ দাও অথবা ওপরের প্লে বাটনে চাপ দাও।",
+    "vowelsIntroAudioPath": "audio/vowels_intro.mp3",
+    "consonantsIntroText": "এসো ব্যঞ্জনবর্ণ শিখি! যেকোনো একটি বর্ণে চাপ দাও অথবা ওপরের প্লে বাটনে চাপ দাও।",
+    "consonantsIntroAudioPath": "audio/consonants_intro.mp3"
   }
 }

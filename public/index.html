@@ -462,9 +462,9 @@
       <h1>বই পড়ি <span>এডমিন প্যানেল</span></h1>
     </div>
     <div class="stats-container">
-      <div class="stat-badge" id="vowel-count">স্বরবর্ণ: --</div>
-      <div class="stat-badge" id="consonant-count">ব্যঞ্জনবর্ণ: --</div>
-      <div class="stat-badge" id="word-count">শব্দ: --</div>
+      <div class="stat-badge" id="vowel-count" onclick="document.querySelectorAll('.tab-btn')[0].click()" style="cursor:pointer">স্বরবর্ণ: --</div>
+      <div class="stat-badge" id="consonant-count" onclick="document.querySelectorAll('.tab-btn')[1].click()" style="cursor:pointer">ব্যঞ্জনবর্ণ: --</div>
+      <div class="stat-badge" id="word-count" onclick="document.querySelectorAll('.tab-btn')[2].click()" style="cursor:pointer">শব্দ: --</div>
     </div>
   </header>
 
@@ -478,16 +478,40 @@
 
     <!-- Vowels Tab Content -->
     <div id="vowels-content" class="tab-content active">
+      <div class="search-bar-container" style="margin-bottom: 24px; display: flex; gap: 15px; align-items: center; background: var(--surface); padding: 16px 20px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+        <input type="text" id="vowels-search" class="form-control" placeholder="বর্ণ বা উচ্চারণ লিখে খুঁজুন..." oninput="filterGrid('vowels')" style="max-width: 350px;">
+        <select id="vowels-filter" class="form-control" onchange="filterGrid('vowels')" style="max-width: 200px; cursor: pointer;">
+          <option value="all">সব ভয়েস দেখান</option>
+          <option value="custom">কাস্টম ভয়েস আছে</option>
+          <option value="default">ডিফল্ট ভয়েস আছে</option>
+        </select>
+      </div>
       <div class="grid-container" id="vowels-grid"></div>
     </div>
 
     <!-- Consonants Tab Content -->
     <div id="consonants-content" class="tab-content">
+      <div class="search-bar-container" style="margin-bottom: 24px; display: flex; gap: 15px; align-items: center; background: var(--surface); padding: 16px 20px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+        <input type="text" id="consonants-search" class="form-control" placeholder="বর্ণ লিখে খুঁজুন..." oninput="filterGrid('consonants')" style="max-width: 350px;">
+        <select id="consonants-filter" class="form-control" onchange="filterGrid('consonants')" style="max-width: 200px; cursor: pointer;">
+          <option value="all">সব ভয়েস দেখান</option>
+          <option value="custom">কাস্টম ভয়েস আছে</option>
+          <option value="default">ডিফল্ট ভয়েস আছে</option>
+        </select>
+      </div>
       <div class="grid-container" id="consonants-grid"></div>
     </div>
 
     <!-- Vowel Words Tab Content -->
     <div id="words-content" class="tab-content">
+      <div class="search-bar-container" style="margin-bottom: 24px; display: flex; gap: 15px; align-items: center; background: var(--surface); padding: 16px 20px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+        <input type="text" id="words-search" class="form-control" placeholder="শব্দ, বর্ণ বা ছড়া লিখে খুঁজুন..." oninput="filterGrid('words')" style="max-width: 350px;">
+        <select id="words-filter" class="form-control" onchange="filterGrid('words')" style="max-width: 200px; cursor: pointer;">
+          <option value="all">সব ভয়েস দেখান</option>
+          <option value="custom">কাস্টম ভয়েস আছে</option>
+          <option value="default">ডিফল্ট ভয়েস আছে</option>
+        </select>
+      </div>
       <div class="grid-container" id="words-grid"></div>
     </div>
 
@@ -527,6 +551,42 @@
             <input type="hidden" id="settings-bangla-audio-url">
             <div style="margin-top:10px;">
               <button type="button" class="btn btn-secondary" onclick="previewFormAudio('settings-bangla-audio-url')" style="padding: 6px 12px; font-size: 13px; display: flex; align-items: center; gap: 6px;">
+                <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
+              </button>
+            </div>
+          </div>
+          <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
+          <div class="form-group">
+            <label>স্বরবর্ণ পেজ শুরুর স্বাগত বক্তব্য (Vowels Intro Text)</label>
+            <textarea id="settings-vowels-text" class="form-control" rows="3" style="font-family: inherit; resize: vertical;"></textarea>
+          </div>
+          <div class="form-group">
+            <label>স্বরবর্ণ পেজ শুরুর কাস্টম ভয়েস ফাইল আপলোড (.mp3)</label>
+            <input type="file" id="settings-vowels-audio-file" accept="audio/mp3,audio/*" style="display:none" onchange="uploadFile(this, 'settings-vowels-audio-url')">
+            <div class="file-upload-zone" onclick="document.getElementById('settings-vowels-audio-file').click()">
+              <p id="settings-vowels-audio-filename">স্বরবর্ণ পেজের ভয়েস আপলোড করতে এখানে ক্লিক করুন</p>
+            </div>
+            <input type="hidden" id="settings-vowels-audio-url">
+            <div style="margin-top:10px;">
+              <button type="button" class="btn btn-secondary" onclick="previewFormAudio('settings-vowels-audio-url')" style="padding: 6px 12px; font-size: 13px; display: flex; align-items: center; gap: 6px;">
+                <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
+              </button>
+            </div>
+          </div>
+          <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
+          <div class="form-group">
+            <label>ব্যঞ্জনবর্ণ পেজ শুরুর স্বাগত বক্তব্য (Consonants Intro Text)</label>
+            <textarea id="settings-consonants-text" class="form-control" rows="3" style="font-family: inherit; resize: vertical;"></textarea>
+          </div>
+          <div class="form-group">
+            <label>ব্যঞ্জনবর্ণ পেজ শুরুর কাস্টম ভয়েস ফাইল আপলোড (.mp3)</label>
+            <input type="file" id="settings-consonants-audio-file" accept="audio/mp3,audio/*" style="display:none" onchange="uploadFile(this, 'settings-consonants-audio-url')">
+            <div class="file-upload-zone" onclick="document.getElementById('settings-consonants-audio-file').click()">
+              <p id="settings-consonants-audio-filename">ব্যঞ্জনবর্ণ পেজের ভয়েস আপলোড করতে এখানে ক্লিক করুন</p>
+            </div>
+            <input type="hidden" id="settings-consonants-audio-url">
+            <div style="margin-top:10px;">
+              <button type="button" class="btn btn-secondary" onclick="previewFormAudio('settings-consonants-audio-url')" style="padding: 6px 12px; font-size: 13px; display: flex; align-items: center; gap: 6px;">
                 <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
               </button>
             </div>
@@ -766,6 +826,30 @@
         banglaFileLabel.textContent = 'বাংলা স্ক্রিনের ভয়েস আপলোড করতে এখানে ক্লিক করুন';
         banglaFileLabel.style.color = 'var(--text-muted)';
       }
+
+      document.getElementById('settings-vowels-text').value = settings.vowelsIntroText || '';
+      document.getElementById('settings-vowels-audio-url').value = settings.vowelsIntroAudioPath || '';
+      
+      const vowelsFileLabel = document.getElementById('settings-vowels-audio-filename');
+      if (settings.vowelsIntroAudioPath && settings.vowelsIntroAudioPath.startsWith('http')) {
+        vowelsFileLabel.textContent = 'কাস্টম ভয়েস আপলোড আছে';
+        vowelsFileLabel.style.color = 'var(--success)';
+      } else {
+        vowelsFileLabel.textContent = 'স্বরবর্ণ পেজের ভয়েস আপলোড করতে এখানে ক্লিক করুন';
+        vowelsFileLabel.style.color = 'var(--text-muted)';
+      }
+
+      document.getElementById('settings-consonants-text').value = settings.consonantsIntroText || '';
+      document.getElementById('settings-consonants-audio-url').value = settings.consonantsIntroAudioPath || '';
+      
+      const consonantsFileLabel = document.getElementById('settings-consonants-audio-filename');
+      if (settings.consonantsIntroAudioPath && settings.consonantsIntroAudioPath.startsWith('http')) {
+        consonantsFileLabel.textContent = 'কাস্টম ভয়েস আপলোড আছে';
+        consonantsFileLabel.style.color = 'var(--success)';
+      } else {
+        consonantsFileLabel.textContent = 'ব্যঞ্জনবর্ণ পেজের ভয়েস আপলোড করতে এখানে ক্লিক করুন';
+        consonantsFileLabel.style.color = 'var(--text-muted)';
+      }
     }
 
     function updateStats() {
@@ -780,6 +864,47 @@
 
       event.target.classList.add('active');
       document.getElementById(`${tabId}-content`).classList.add('active');
+
+      // Reset search inputs & filters on switch
+      const searchInput = document.getElementById(`${tabId}-search`);
+      const filterSelect = document.getElementById(`${tabId}-filter`);
+      if (searchInput) searchInput.value = '';
+      if (filterSelect) filterSelect.value = 'all';
+      
+      const grid = document.getElementById(`${tabId}-grid`);
+      if (grid) {
+        const cards = grid.getElementsByClassName('card');
+        for (let card of cards) {
+          card.style.display = '';
+        }
+      }
+    }
+
+    function filterGrid(type) {
+      const searchVal = document.getElementById(`${type}-search`).value.toLowerCase();
+      const filterVal = document.getElementById(`${type}-filter`).value;
+      const grid = document.getElementById(`${type}-grid`);
+      const cards = grid.getElementsByClassName('card');
+
+      for (let card of cards) {
+        const text = card.textContent.toLowerCase();
+        const hasCustomVoice = card.querySelector('.badge-custom') !== null;
+        
+        let matchesSearch = text.includes(searchVal);
+        let matchesFilter = true;
+        
+        if (filterVal === 'custom') {
+          matchesFilter = hasCustomVoice;
+        } else if (filterVal === 'default') {
+          matchesFilter = !hasCustomVoice;
+        }
+
+        if (matchesSearch && matchesFilter) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      }
     }
 
     function previewFormAudio(urlInputId) {
@@ -1105,7 +1230,11 @@
         welcomeText: document.getElementById('settings-welcome-text').value,
         welcomeAudioPath: document.getElementById('settings-welcome-audio-url').value,
         banglaIntroText: document.getElementById('settings-bangla-text').value,
-        banglaIntroAudioPath: document.getElementById('settings-bangla-audio-url').value
+        banglaIntroAudioPath: document.getElementById('settings-bangla-audio-url').value,
+        vowelsIntroText: document.getElementById('settings-vowels-text').value,
+        vowelsIntroAudioPath: document.getElementById('settings-vowels-audio-url').value,
+        consonantsIntroText: document.getElementById('settings-consonants-text').value,
+        consonantsIntroAudioPath: document.getElementById('settings-consonants-audio-url').value
       };
 
       fetch(`${API_URL}/settings/update`, {

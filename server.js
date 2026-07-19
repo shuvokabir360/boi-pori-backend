@@ -193,7 +193,12 @@ app.get('/api/settings', (req, res) => {
 
 // 7. Update Settings API
 app.post('/api/settings/update', (req, res) => {
-  const { welcomeText, welcomeAudioPath, banglaIntroText, banglaIntroAudioPath } = req.body;
+  const { 
+    welcomeText, welcomeAudioPath, 
+    banglaIntroText, banglaIntroAudioPath,
+    vowelsIntroText, vowelsIntroAudioPath,
+    consonantsIntroText, consonantsIntroAudioPath
+  } = req.body;
   const db = readDB();
   
   db.settings = {
@@ -201,7 +206,11 @@ app.post('/api/settings/update', (req, res) => {
     welcomeText: welcomeText !== undefined ? welcomeText : db.settings.welcomeText,
     welcomeAudioPath: welcomeAudioPath !== undefined ? welcomeAudioPath : db.settings.welcomeAudioPath,
     banglaIntroText: banglaIntroText !== undefined ? banglaIntroText : db.settings.banglaIntroText,
-    banglaIntroAudioPath: banglaIntroAudioPath !== undefined ? banglaIntroAudioPath : db.settings.banglaIntroAudioPath
+    banglaIntroAudioPath: banglaIntroAudioPath !== undefined ? banglaIntroAudioPath : db.settings.banglaIntroAudioPath,
+    vowelsIntroText: vowelsIntroText !== undefined ? vowelsIntroText : db.settings.vowelsIntroText,
+    vowelsIntroAudioPath: vowelsIntroAudioPath !== undefined ? vowelsIntroAudioPath : db.settings.vowelsIntroAudioPath,
+    consonantsIntroText: consonantsIntroText !== undefined ? consonantsIntroText : db.settings.consonantsIntroText,
+    consonantsIntroAudioPath: consonantsIntroAudioPath !== undefined ? consonantsIntroAudioPath : db.settings.consonantsIntroAudioPath
   };
   
   writeDB(db);
@@ -283,7 +292,11 @@ app.post('/api/reset', (req, res) => {
       "welcomeText": "বই পড়ি অ্যাপে স্বাগতম! পড়ার ক্যাটাগরি বেছে নিতে নিচের যেকোনো একটি বড় বাটনে চাপ দাও।",
       "welcomeAudioPath": "audio/welcome.mp3",
       "banglaIntroText": "এসো বাংলা শিখি! স্বরবর্ণ, ব্যঞ্জনবর্ণ ও শব্দ শিখতে নিচে চাপ দাও।",
-      "banglaIntroAudioPath": "audio/bangla_intro.mp3"
+      "banglaIntroAudioPath": "audio/bangla_intro.mp3",
+      "vowelsIntroText": "এসো স্বরবর্ণ শিখি! যেকোনো একটি বর্ণে চাপ দাও অথবা ওপরের প্লে বাটনে চাপ দাও।",
+      "vowelsIntroAudioPath": "audio/vowels_intro.mp3",
+      "consonantsIntroText": "এসো ব্যঞ্জনবর্ণ শিখি! যেকোনো একটি বর্ণে চাপ দাও অথবা ওপরের প্লে বাটনে চাপ দাও।",
+      "consonantsIntroAudioPath": "audio/consonants_intro.mp3"
     }
   };
   writeDB(seed);
