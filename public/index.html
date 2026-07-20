@@ -4,540 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>বই পড়ি - এডমিন ড্যাশবোর্ড</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
-  <!-- Link to new WordPress-like stylesheet -->
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <!-- Sidebar navigation (WordPress style) -->
-  <aside class="sidebar" id="admin-sidebar">
-    <div class="sidebar-header">
-      <h2 class="sidebar-logo">বই পড়ি</h2>
-    </div>
-    <nav class="sidebar-nav">
-      <ul>
-        <li class="nav-item active" data-tab="dashboard"><a href="#" class="nav-link"><img src="icons.svg#dashboard" class="nav-icon" alt="Dashboard"/> Dashboard</a></li>
-        <li class="nav-item" data-tab="bangla"><a href="#" class="nav-link"><img src="icons.svg#bangla" class="nav-icon" alt="Bangla"/> বাংলা</a></li>
-        <li class="nav-item" data-tab="english"><a href="#" class="nav-link"><img src="icons.svg#english" class="nav-icon" alt="English"/> ইংরেজি</a></li>
-        <li class="nav-item" data-tab="math"><a href="#" class="nav-link"><img src="icons.svg#math" class="nav-icon" alt="Math"/> অংক</a></li>
-        <li class="nav-item" data-tab="arabic"><a href="#" class="nav-link"><img src="icons.svg#arabic" class="nav-icon" alt="Arabic"/> আরবী</a></li>
-        <li class="nav-item" data-tab="categories"><a href="#" class="nav-link"><img src="icons.svg#categories" class="nav-icon" alt="Categories"/> ক্যাটাগরি</a></li>
-        <li class="nav-item" data-tab="settings"><a href="#" class="nav-link"><img src="icons.svg#settings" class="nav-icon" alt="Settings"/> সেটিংস</a></li>
-      </ul>
-    </nav>
-  </aside>
-  <!-- Main content wrapper -->
-  <div class="main-wrapper">
-    <!-- Top header with hamburger -->
-    <header class="top-header">
-      <button class="sidebar-toggle" aria-label="Toggle navigation"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
-      <div class="logo-section h1">
-        <h1>বই পড়ি <span>এডমিন প্যানেল</span></h1>
-      </div>
-      <div class="stats-container">
-        <div class="stat-badge" id="vowel-count" onclick="document.querySelectorAll('.tab-btn')[0].click()" style="cursor:pointer">স্বরবর্ণ: --</div>
-        <div class="stat-badge" id="consonant-count" onclick="document.querySelectorAll('.tab-btn')[1].click()" style="cursor:pointer">ব্যঞ্জনবর্ণ: --</div>
-        <div class="stat-badge" id="word-count" onclick="document.querySelectorAll('.tab-btn')[2].click()" style="cursor:pointer">শব্দ: --</div>
-      </div>
-    </header>
-    <div class="container">
-
-  <style>
-    :root {
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
-      --bg: #0f172a;
-      --surface: #1e293b;
-      --border: #334155;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --success: #10b981;
-      --danger: #ef4444;
-      --indigo: #6366f1;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Outfit', 'Hind Siliguri', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-    }
-
-    header {
-      background-color: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 20px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-
-    .logo-section h1 {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .logo-section span {
-      background: linear-gradient(135deg, #60a5fa, #2563eb);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .stats-container {
-      display: flex;
-      gap: 20px;
-    }
-
-    .stat-badge {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border);
-      padding: 8px 16px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .badge {
-      font-size: 11px;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-weight: 700;
-      margin-left: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    
-    .badge-custom {
-      background-color: rgba(16, 185, 129, 0.15);
-      color: #10b981;
-      border: 1px solid rgba(16, 185, 129, 0.3);
-    }
-    
-    .badge-default {
-      background-color: rgba(255, 255, 255, 0.05);
-      color: var(--text-muted);
-      border: 1px solid var(--border);
-    }
-
-    .container {
-      max-width: 1400px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
-
-    .tabs {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 30px;
-      border-bottom: 2px solid var(--border);
-      padding-bottom: 15px;
-    }
-
-    .tab-btn {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      font-size: 18px;
-      font-weight: 700;
-      padding: 10px 20px;
-      cursor: pointer;
-      border-radius: 8px;
-      transition: all 0.2s ease;
-    }
-
-    .tab-btn:hover {
-      color: var(--text);
-      background: rgba(255, 255, 255, 0.03);
-    }
-
-    .tab-btn.active {
-      color: #fff;
-      background: var(--primary);
-    }
-
-    .tab-content {
-      display: none;
-    }
-
-    .tab-content.active {
-      display: block;
-      animation: fadeIn 0.4s ease;
-    }
-
-    /* Sub-tabs Styling */
-    .sub-tabs {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 24px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 16px;
-    }
-
-    .sub-tab-btn {
-      padding: 10px 22px;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 14px;
-      transition: all 0.2s;
-    }
-
-    .sub-tab-btn:hover {
-      background: rgba(255, 255, 255, 0.08);
-      color: var(--text);
-    }
-
-    .sub-tab-btn.active {
-      background: rgba(34, 197, 94, 0.1);
-      border-color: rgba(34, 197, 94, 0.3);
-      color: #22c55e;
-    }
-
-    .sub-tab-view {
-      display: none;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .sub-tab-view.active {
-      display: block;
-    }
-
-    .grid-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
-    }
-
-    .card {
-      background-color: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-    }
-
-    .card-preview {
-      width: 100px;
-      height: 100px;
-      border-radius: 16px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 48px;
-      font-weight: 900;
-      margin-bottom: 20px;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .word-image-preview {
-      width: 100%;
-      height: 120px;
-      background: #f8fafc;
-      border-radius: 12px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 16px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-    }
-
-    .word-image-preview img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-    }
-
-    .word-image-preview .placeholder-icon {
-      font-size: 40px;
-      color: #94a3b8;
-    }
-
-    .card-info {
-      text-align: center;
-      width: 100%;
-      margin-bottom: 20px;
-    }
-
-    .card-title {
-      font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .card-subtitle {
-      font-size: 14px;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-    }
-
-    .audio-player-container {
-      margin-top: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .play-audio-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      color: var(--text);
-      transition: background 0.2s;
-    }
-
-    .play-audio-btn:hover {
-      background: var(--primary);
-    }
-
-    .play-audio-btn svg {
-      width: 16px;
-      height: 16px;
-      fill: currentColor;
-    }
-
-    .edit-btn {
-      width: 100%;
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text);
-      border: 1px solid var(--border);
-      padding: 10px;
-      border-radius: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .edit-btn:hover {
-      background: var(--primary);
-      border-color: var(--primary);
-    }
-
-    /* Modal Styling */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(15, 23, 42, 0.8);
-      backdrop-filter: blur(8px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      z-index: 100;
-    }
-
-    .modal-overlay.active {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    .modal {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      width: 90%;
-      max-width: 550px;
-      border-radius: 24px;
-      padding: 30px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      transform: translateY(20px);
-      transition: transform 0.3s ease;
-    }
-
-    .modal-overlay.active .modal {
-      transform: translateY(0);
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-
-    .modal-header h3 {
-      font-size: 22px;
-      font-weight: 700;
-    }
-
-    .close-modal-btn {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 24px;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-    }
-
-    .form-control {
-      width: 100%;
-      background: rgba(0,0,0,0.2);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px;
-      color: var(--text);
-      font-size: 16px;
-      font-family: inherit;
-    }
-
-    .form-control:focus {
-      outline: none;
-      border-color: var(--primary);
-    }
-
-    .color-pickers {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-    }
-
-    .color-picker-input {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(0,0,0,0.2);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 8px 12px;
-    }
-
-    .color-picker-input input[type="color"] {
-      border: none;
-      background: none;
-      width: 36px;
-      height: 36px;
-      cursor: pointer;
-    }
-
-    .file-upload-zone {
-      border: 2px dashed var(--border);
-      border-radius: 16px;
-      padding: 20px;
-      text-align: center;
-      cursor: pointer;
-      transition: border-color 0.2s;
-    }
-
-    .file-upload-zone:hover {
-      border-color: var(--primary);
-    }
-
-    .file-upload-zone p {
-      font-size: 14px;
-      color: var(--text-muted);
-    }
-
-    .modal-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 15px;
-      margin-top: 30px;
-    }
-
-    .btn {
-      padding: 12px 24px;
-      border-radius: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      border: none;
-      transition: all 0.2s;
-    }
-
-    .btn-secondary {
-      background: rgba(255,255,255,0.05);
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255,255,255,0.1);
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: #fff;
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-hover);
-    }
-
-    .reset-btn-container {
-      margin-top: 60px;
-      text-align: center;
-    }
-
-    .btn-danger {
-      background: rgba(239, 68, 68, 0.1);
-      color: var(--danger);
-      border: 1px solid var(--danger);
-    }
-
-    .btn-danger:hover {
-      background: var(--danger);
-      color: #fff;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
-</head>
-<body>
-
-  <header>
-    <div class="logo-section">
-      <h1>বই পড়ি <span>এডমিন প্যানেল</span></h1>
+<body class="wp-admin wp-core-ui">
+
+  <!-- Top Admin Bar (wpadminbar style) -->
+  <div id="wpadminbar">
+    <div class="quicklinks">
+      <button class="sidebar-toggle" onclick="toggleMobileMenu()" aria-label="Toggle navigation" style="background: none; border: none; color: #fff; cursor: pointer; margin-right: 10px; align-items: center; justify-content: center;">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+      <a href="#" class="ab-item" onclick="switchTab('dashboard')">🌸 বই পড়ি এডমিন প্যানেল</a>
     </div>
     <div class="stats-container">
       <div class="stat-badge" id="vowel-count" onclick="navigateToSubTab('vowels', 0)" style="cursor:pointer">স্বরবর্ণ: --</div>
@@ -545,207 +23,331 @@
       <div class="stat-badge" id="word-count" onclick="navigateToSubTab('words', 2)" style="cursor:pointer">স্বর শব্দ: --</div>
       <div class="stat-badge" id="consonant-word-count" onclick="navigateToSubTab('consonant-words', 3)" style="cursor:pointer">ব্যঞ্জন শব্দ: --</div>
     </div>
-  </header>
+  </div>
 
-  <div class="container">
-    <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('bangla')">বাংলা (Bangla)</button>
-      <button class="tab-btn" onclick="switchTab('english')">ইংরেজি (English)</button>
-      <button class="tab-btn" onclick="switchTab('math')">অংক (Math)</button>
-      <button class="tab-btn" onclick="switchTab('arabic')">আরবী (Arabic)</button>
-      <button class="tab-btn" onclick="switchTab('categories')">ক্যাটাগরি সেটিংস (Categories)</button>
-      <button class="tab-btn" onclick="switchTab('settings')">অ্যাপ সেটিংস (App Settings)</button>
-    </div>
+  <!-- Left Sidebar Navigation (adminmenu style) -->
+  <aside class="sidebar" id="adminmenu">
+    <nav class="sidebar-nav">
+      <ul>
+        <li class="nav-item active" data-tab="dashboard" onclick="switchTab('dashboard', this)">
+          <a href="#" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            ড্যাশবোর্ড (Dashboard)
+          </a>
+        </li>
+        <li class="nav-item" data-tab="bangla" onclick="switchTab('bangla', this)">
+          <a href="#" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0-2-.9-2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
+            বাংলা (Bangla)
+          </a>
+        </li>
+        <li class="nav-item" data-tab="english" onclick="switchTab('english', this)">
+          <a href="#" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v2h11.17C11.5 7.69 10.56 9.12 9.5 10.46 8.89 9.8 8.37 9.08 7.94 8.3h-2c.53 1.13 1.2 2.19 2 3.19l-4.17 4.1 1.41 1.41 3.82-3.82 2.54 2.51.33-.31zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>
+            ইংরেজি (English)
+          </a>
+        </li>
+        <li class="nav-item" data-tab="math" onclick="switchTab('math', this)">
+          <a href="#" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M19 13H5v-2h14v2zM19 5H5v2h14V5zm-8 14H5v-2h6v2zm8-2h-6v2h6v-2z"/></svg>
+            অংক (Math)
+          </a>
+        </li>
+        <li class="nav-item" data-tab="arabic" onclick="switchTab('arabic', this)">
+          <a href="#" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            আরবী (Arabic)
+          </a>
+        </li>
+        <li class="nav-item" data-tab="categories" onclick="switchTab('categories', this)">
+          <a href="#" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+            ক্যাটাগরি Settings
+          </a>
+        </li>
+        <li class="nav-item" data-tab="settings" onclick="switchTab('settings', this)">
+          <a href="#" class="nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+            অ্যাপ Settings
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
 
-    <!-- Bangla Category Tab Content -->
-    <div id="bangla-content" class="tab-content active">
-      <div class="sub-tabs">
-        <button class="sub-tab-btn active" onclick="switchSubTab('vowels')">স্বরবর্ণ (Vowels)</button>
-        <button class="sub-tab-btn" onclick="switchSubTab('consonants')">ব্যঞ্জনবর্ণ (Consonants)</button>
-        <button class="sub-tab-btn" onclick="switchSubTab('words')">শব্দ শিখন (Vowel Words)</button>
-        <button class="sub-tab-btn" onclick="switchSubTab('consonant-words')">ব্যঞ্জন শব্দ (Consonant Words)</button>
+  <!-- Main content wrapper (main-wrapper style) -->
+  <div class="main-wrapper">
+    <div class="container">
+
+      <!-- Dashboard Tab Content -->
+      <div id="dashboard-content" class="tab-content active">
+        <h1 class="wp-heading">ড্যাশবোর্ড (Dashboard)</h1>
+        <p class="wp-subheading">এক নজরে আপনার অ্যাপের সম্পূর্ণ স্ট্যাটাস ও কার্যক্রম</p>
+
+        <div class="welcome-panel">
+          <div class="welcome-panel-content">
+            <h2>বই পড়ি এডমিন প্যানেলে স্বাগতম!</h2>
+            <p class="about-description">এখান থেকে আপনি বই পড়ি অ্যাপের স্বরবর্ণ, ব্যঞ্জনবর্ণ, শব্দ শিখন ও অ্যাপের বিভিন্ন ভয়েস এবং থিম সেটিংস সহজেই পরিবর্তন করতে পারবেন।</p>
+          </div>
+        </div>
+
+        <div class="metabox-holder">
+          <div class="postbox">
+            <div class="postbox-header">এক নজরে (At a Glance)</div>
+            <div class="postbox-body">
+              <ul class="glance-list">
+                <li>🌸 <a href="#" onclick="navigateToSubTab('vowels', 0)" id="dash-vowel-count">-- স্বরবর্ণ</a></li>
+                <li>✍️ <a href="#" onclick="navigateToSubTab('consonants', 1)" id="dash-consonant-count">-- ব্যঞ্জনবর্ণ</a></li>
+                <li>📖 <a href="#" onclick="navigateToSubTab('words', 2)" id="dash-word-count">-- স্বর শব্দ</a></li>
+                <li>📝 <a href="#" onclick="navigateToSubTab('consonant-words', 3)" id="dash-consonant-word-count">-- ব্যঞ্জন শব্দ</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="postbox">
+            <div class="postbox-header">অ্যাপ তথ্য ও নির্দেশাবলী (App Info)</div>
+            <div class="postbox-body" style="font-size:13px; line-height:1.6;">
+              <p><strong>মোবাইল অ্যাপ ইন্টিগ্রেশন:</strong> এই ড্যাশবোর্ড থেকে আপলোড করা সমস্ত কাস্টম ইমেজ এবং ভয়েস ফাইল সরাসরি মোবাইল অ্যাপের ডাটাবেসে সিংক্রোনাইজড হয়ে যাবে।</p>
+              <p style="margin-top:10px;"><strong>ভয়েস ও ইমেজ স্ট্যাটাস:</strong></p>
+              <ul style="margin-left:20px; margin-top:5px;">
+                <li><span class="badge badge-custom">কাস্টম ভয়েস</span> - আপনি সফলভাবে কাস্টম অডিও ফাইল আপলোড করেছেন।</li>
+                <li><span class="badge badge-default">ডিফল্ট</span> - মোবাইল অ্যাপের লোকাল অ্যাসেট ফাইল ব্যবহার হচ্ছে।</li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Sub-tab Vowels View -->
-      <div id="sub-vowels-view" class="sub-tab-view active">
-        <div class="search-bar-container" style="margin-bottom: 24px; display: flex; gap: 15px; align-items: center; background: var(--surface); padding: 16px 20px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
-          <input type="text" id="vowels-search" class="form-control" placeholder="বর্ণ বা উচ্চারণ লিখে খুঁজুন..." oninput="filterGrid('vowels')" style="max-width: 350px;">
-          <select id="vowels-filter" class="form-control" onchange="filterGrid('vowels')" style="max-width: 200px; cursor: pointer;">
+      <!-- Bangla Category Tab Content -->
+      <div id="bangla-content" class="tab-content">
+        <h1 class="wp-heading">বাংলা (Bangla)</h1>
+        <p class="wp-subheading">বাংলা ভাষা শিক্ষার স্বরবর্ণ, ব্যঞ্জনবর্ণ ও শব্দসমূহ সম্পাদন করুন</p>
+
+        <div class="sub-tabs">
+          <button class="sub-tab-btn active" onclick="switchSubTab('vowels')">স্বরবর্ণ (Vowels)</button>
+          <button class="sub-tab-btn" onclick="switchSubTab('consonants')">ব্যঞ্জনবর্ণ (Consonants)</button>
+          <button class="sub-tab-btn" onclick="switchSubTab('words')">শব্দ শিখন (Vowel Words)</button>
+          <button class="sub-tab-btn" onclick="switchSubTab('consonant-words')">ব্যঞ্জন শব্দ (Consonant Words)</button>
+        </div>
+
+        <!-- Sub-tab Vowels View -->
+        <div id="sub-vowels-view" class="sub-tab-view active">
+          <div class="search-bar-container" style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center;">
+            <input type="text" id="vowels-search" class="form-control" placeholder="বর্ণ বা উচ্চারণ লিখে খুঁজুন..." oninput="filterGrid('vowels')" style="max-width: 300px;">
+            <select id="vowels-filter" class="form-control" onchange="filterGrid('vowels')" style="max-width: 180px; cursor: pointer;">
+              <option value="all">সব ভয়েস দেখান</option>
+              <option value="custom">কাস্টম ভয়েস আছে</option>
+              <option value="default">ডিফল্ট ভয়েস আছে</option>
+            </select>
+          </div>
+          <div class="grid-container" id="vowels-grid"></div>
+        </div>
+
+        <!-- Sub-tab Consonants View -->
+        <div id="sub-consonants-view" class="sub-tab-view" style="display: none;">
+          <div class="search-bar-container" style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center;">
+            <input type="text" id="consonants-search" class="form-control" placeholder="বর্ণ লিখে খুঁজুন..." oninput="filterGrid('consonants')" style="max-width: 300px;">
+            <select id="consonants-filter" class="form-control" onchange="filterGrid('consonants')" style="max-width: 180px; cursor: pointer;">
+              <option value="all">সব ভয়েস দেখান</option>
+              <option value="custom">কাস্টম ভয়েস আছে</option>
+              <option value="default">ডিফল্ট ভয়েস আছে</option>
+            </select>
+          </div>
+          <div class="grid-container" id="consonants-grid"></div>
+        </div>
+
+        <!-- Sub-tab Words View -->
+        <div id="sub-words-view" class="sub-tab-view" style="display: none;">
+          <div class="search-bar-container" style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center;">
+            <input type="text" id="words-search" class="form-control" placeholder="শব্দ, বর্ণ বা ছড়া লিখে খুঁজুন..." oninput="filterGrid('words')" style="max-width: 300px;">
+            <select id="words-filter" class="form-control" onchange="filterGrid('words')" style="max-width: 180px; cursor: pointer;">
+              <option value="all">সব ভয়েস দেখান</option>
+              <option value="custom">কাস্টম ভয়েস আছে</option>
+              <option value="default">ডিফল্ট ভয়েস আছে</option>
+            </select>
+          </div>
+          <div class="grid-container" id="words-grid"></div>
+        </div>
+
+        <!-- Sub-tab Consonant Words View -->
+        <div id="sub-consonant-words-view" class="sub-tab-view" style="display: none;">
+          <div class="search-bar-container" style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center;">
+            <input type="text" id="consonant-words-search" class="form-control" placeholder="শব্দ, বর্ণ বা ছড়া লিখে খুঁজুন..." oninput="filterGrid('consonant-words')" style="max-width: 300px;">
+            <select id="consonant-words-filter" class="form-control" onchange="filterGrid('consonant-words')" style="max-width: 180px; cursor: pointer;">
+              <option value="all">সব ভয়েস দেখান</option>
+              <option value="custom">কাস্টম ভয়েস আছে</option>
+              <option value="default">ডিফল্ট ভয়েস আছে</option>
+            </select>
+          </div>
+          <div class="grid-container" id="consonant-words-grid"></div>
+        </div>
+      </div>
+
+      <!-- English Category Tab Content -->
+      <div id="english-content" class="tab-content">
+        <h1 class="wp-heading">ইংরেজি (English)</h1>
+        <p class="wp-subheading">ইংরেজি শিক্ষার বর্ণমালা ও শব্দ আপডেটের অপশন</p>
+        <div class="welcome-panel" style="text-align: center; padding: 50px;">
+          <div style="font-size: 48px; margin-bottom: 15px;">🇬🇧</div>
+          <h3>ইংরেজি শিক্ষার সেটিংস শীঘ্রই আসছে</h3>
+          <p class="about-description">ইংরেজি ক্যাটাগরির বর্ণমালা ও শব্দ আপডেটের অপশন শীঘ্রই ড্যাশবোর্ডে যুক্ত করা হবে।</p>
+        </div>
+      </div>
+
+      <!-- Math Category Tab Content -->
+      <div id="math-content" class="tab-content">
+        <h1 class="wp-heading">অংক (Math)</h1>
+        <p class="wp-subheading">অংক শিক্ষার সংখ্যা ও যোগ-বিয়োগের মান আপডেটের অপশন</p>
+        <div class="welcome-panel" style="text-align: center; padding: 50px;">
+          <div style="font-size: 48px; margin-bottom: 15px;">🔢</div>
+          <h3>অংক শিক্ষার সেটিংস শীঘ্রই আসছে</h3>
+          <p class="about-description">অংক ক্যাটাগরির সংখ্যা ও যোগ-বিয়োগের মান আপডেটের অপশন শীঘ্রই ড্যাশবোর্ডে যুক্ত করা হবে।</p>
+        </div>
+      </div>
+
+      <!-- Arabic Category Tab Content -->
+      <div id="arabic-content" class="tab-content">
+        <h1 class="wp-heading">আরবী (Arabic)</h1>
+        <p class="wp-subheading">আরবী হরফ ও কুরআন শিক্ষার মান আপডেটের অপশন</p>
+        <div class="welcome-panel" style="text-align: center; padding: 50px;">
+          <div style="font-size: 48px; margin-bottom: 15px;">🕌</div>
+          <h3>আরবী শিক্ষার সেটিংস শীঘ্রই আসছে</h3>
+          <p class="about-description">আরবী ক্যাটাগরির হরফ ও কুরআন শিক্ষার মান আপডেটের অপশন শীঘ্রই ড্যাশবোর্ডে যুক্ত করা হবে।</p>
+        </div>
+      </div>
+
+      <!-- Categories Settings Tab Content -->
+      <div id="categories-content" class="tab-content">
+        <h1 class="wp-heading">ক্যাটাগরি Settings</h1>
+        <p class="wp-subheading">অ্যাপের মূল ক্যাটাগরি কাভার এবং স্বাগত বক্তব্য এডিটর</p>
+        <div class="search-bar-container" style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center;">
+          <input type="text" id="categories-search" class="form-control" placeholder="ক্যাটাগরি নাম লিখে খুঁজুন..." oninput="filterGrid('categories')" style="max-width: 300px;">
+          <select id="categories-filter" class="form-control" onchange="filterGrid('categories')" style="max-width: 180px; cursor: pointer;">
             <option value="all">সব ভয়েস দেখান</option>
             <option value="custom">কাস্টম ভয়েস আছে</option>
             <option value="default">ডিফল্ট ভয়েস আছে</option>
           </select>
         </div>
-        <div class="grid-container" id="vowels-grid"></div>
+        <div class="grid-container" id="categories-grid"></div>
       </div>
 
-      <!-- Sub-tab Consonants View -->
-      <div id="sub-consonants-view" class="sub-tab-view" style="display: none;">
-        <div class="search-bar-container" style="margin-bottom: 24px; display: flex; gap: 15px; align-items: center; background: var(--surface); padding: 16px 20px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
-          <input type="text" id="consonants-search" class="form-control" placeholder="বর্ণ লিখে খুঁজুন..." oninput="filterGrid('consonants')" style="max-width: 350px;">
-          <select id="consonants-filter" class="form-control" onchange="filterGrid('consonants')" style="max-width: 200px; cursor: pointer;">
-            <option value="all">সব ভয়েস দেখান</option>
-            <option value="custom">কাস্টম ভয়েস আছে</option>
-            <option value="default">ডিফল্ট ভয়েস আছে</option>
-          </select>
+      <!-- Settings Tab Content -->
+      <div id="settings-content" class="tab-content">
+        <h1 class="wp-heading">অ্যাপ Settings</h1>
+        <p class="wp-subheading">অ্যাপ শুরু হওয়ার স্বাগত বক্তব্য ও অন্যান্য সাধারণ কনফিগারেশন</p>
+        
+        <div class="postbox">
+          <div class="postbox-header">সাধারণ সেটিংস (General Settings)</div>
+          <div class="postbox-body">
+            <form id="settings-form" onsubmit="saveSettings(event)">
+              <table class="form-table">
+                <!-- Welcome Text -->
+                <tr>
+                  <th scope="row"><label for="settings-welcome-text">স্বাগত বক্তব্য (Welcome Text)</label></th>
+                  <td>
+                    <textarea id="settings-welcome-text" class="form-control" rows="3" style="font-family: inherit; resize: vertical; max-width: 500px;"></textarea>
+                    <p class="description" style="color: var(--wp-text-muted); margin-top:5px; font-size:12px;">অ্যাপ খোলার সাথে সাথে এই স্বাগত লেখাটি স্ক্রিনে প্রদর্শিত হবে।</p>
+                  </td>
+                </tr>
+                <!-- Welcome Audio -->
+                <tr>
+                  <th scope="row"><label>স্বাগত ভয়েস অডিও (.mp3)</label></th>
+                  <td>
+                    <input type="file" id="settings-welcome-audio-file" accept="audio/mp3,audio/*" style="display:none" onchange="uploadFile(this, 'settings-welcome-audio-url')">
+                    <div class="file-upload-zone" onclick="document.getElementById('settings-welcome-audio-file').click()" style="max-width: 500px;">
+                      <p id="settings-welcome-audio-filename">স্বাগত বক্তব্যের ভয়েস আপলোড করতে এখানে ক্লিক করুন</p>
+                    </div>
+                    <input type="hidden" id="settings-welcome-audio-url">
+                    <div style="margin-top:10px;">
+                      <button type="button" class="btn btn-secondary" onclick="previewFormAudio('settings-welcome-audio-url')">
+                        <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;margin-right:4px;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <!-- Bangla Text -->
+                <tr>
+                  <th scope="row"><label for="settings-bangla-text">বাংলা স্ক্রিন শুরুর টেক্সট</label></th>
+                  <td>
+                    <textarea id="settings-bangla-text" class="form-control" rows="3" style="font-family: inherit; resize: vertical; max-width: 500px;"></textarea>
+                  </td>
+                </tr>
+                <!-- Bangla Audio -->
+                <tr>
+                  <th scope="row"><label>বাংলা স্ক্রিন শুরুর ভয়েস (.mp3)</label></th>
+                  <td>
+                    <input type="file" id="settings-bangla-audio-file" accept="audio/mp3,audio/*" style="display:none" onchange="uploadFile(this, 'settings-bangla-audio-url')">
+                    <div class="file-upload-zone" onclick="document.getElementById('settings-bangla-audio-file').click()" style="max-width: 500px;">
+                      <p id="settings-bangla-audio-filename">বাংলা স্ক্রিনের ভয়েস আপলোড করতে এখানে ক্লিক করুন</p>
+                    </div>
+                    <input type="hidden" id="settings-bangla-audio-url">
+                    <div style="margin-top:10px;">
+                      <button type="button" class="btn btn-secondary" onclick="previewFormAudio('settings-bangla-audio-url')">
+                        <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;margin-right:4px;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <!-- Vowels Intro Text -->
+                <tr>
+                  <th scope="row"><label for="settings-vowels-text">স্বরবর্ণ পেজ শুরুর টেক্সট</label></th>
+                  <td>
+                    <textarea id="settings-vowels-text" class="form-control" rows="3" style="font-family: inherit; resize: vertical; max-width: 500px;"></textarea>
+                  </td>
+                </tr>
+                <!-- Vowels Intro Audio -->
+                <tr>
+                  <th scope="row"><label>স্বরবর্ণ পেজ শুরুর ভয়েস (.mp3)</label></th>
+                  <td>
+                    <input type="file" id="settings-vowels-audio-file" accept="audio/mp3,audio/*" style="display:none" onchange="uploadFile(this, 'settings-vowels-audio-url')">
+                    <div class="file-upload-zone" onclick="document.getElementById('settings-vowels-audio-file').click()" style="max-width: 500px;">
+                      <p id="settings-vowels-audio-filename">স্বরবর্ণ পেজের ভয়েস আপলোড করতে এখানে ক্লিক করুন</p>
+                    </div>
+                    <input type="hidden" id="settings-vowels-audio-url">
+                    <div style="margin-top:10px;">
+                      <button type="button" class="btn btn-secondary" onclick="previewFormAudio('settings-vowels-audio-url')">
+                        <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;margin-right:4px;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <!-- Consonants Intro Text -->
+                <tr>
+                  <th scope="row"><label for="settings-consonants-text">ব্যঞ্জনবর্ণ পেজ শুরুর টেক্সট</label></th>
+                  <td>
+                    <textarea id="settings-consonants-text" class="form-control" rows="3" style="font-family: inherit; resize: vertical; max-width: 500px;"></textarea>
+                  </td>
+                </tr>
+                <!-- Consonants Intro Audio -->
+                <tr>
+                  <th scope="row"><label>ব্যঞ্জনবর্ণ পেজ শুরুর ভয়েস (.mp3)</label></th>
+                  <td>
+                    <input type="file" id="settings-consonants-audio-file" accept="audio/mp3,audio/*" style="display:none" onchange="uploadFile(this, 'settings-consonants-audio-url')">
+                    <div class="file-upload-zone" onclick="document.getElementById('settings-consonants-audio-file').click()" style="max-width: 500px;">
+                      <p id="settings-consonants-audio-filename">ব্যঞ্জনবর্ণ পেজের ভয়েস আপলোড করতে এখানে ক্লিক করুন</p>
+                    </div>
+                    <input type="hidden" id="settings-consonants-audio-url">
+                    <div style="margin-top:10px;">
+                      <button type="button" class="btn btn-secondary" onclick="previewFormAudio('settings-consonants-audio-url')">
+                        <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;margin-right:4px;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+              <div style="margin-top: 25px; padding-bottom:10px;">
+                <button type="submit" class="btn btn-primary">সেটিংস সংরক্ষণ করুন (Save Settings)</button>
+              </div>
+            </form>
+          </div>
         </div>
-        <div class="grid-container" id="consonants-grid"></div>
       </div>
 
-      <!-- Sub-tab Words View -->
-      <div id="sub-words-view" class="sub-tab-view" style="display: none;">
-        <div class="search-bar-container" style="margin-bottom: 24px; display: flex; gap: 15px; align-items: center; background: var(--surface); padding: 16px 20px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
-          <input type="text" id="words-search" class="form-control" placeholder="শব্দ, বর্ণ বা ছড়া লিখে খুঁজুন..." oninput="filterGrid('words')" style="max-width: 350px;">
-          <select id="words-filter" class="form-control" onchange="filterGrid('words')" style="max-width: 200px; cursor: pointer;">
-            <option value="all">সব ভয়েস দেখান</option>
-            <option value="custom">কাস্টম ভয়েস আছে</option>
-            <option value="default">ডিফল্ট ভয়েস আছে</option>
-          </select>
-        </div>
-        <div class="grid-container" id="words-grid"></div>
+      <!-- Reset Data Button Section -->
+      <div class="reset-btn-container">
+        <button class="btn btn-danger" onclick="resetDatabase()">ফ্যাক্টরি রিসেট (পুনরায় মূল অ্যাপ ডাটায় ফেরত যান)</button>
       </div>
 
-      <!-- Sub-tab Consonant Words View -->
-      <div id="sub-consonant-words-view" class="sub-tab-view" style="display: none;">
-        <div class="search-bar-container" style="margin-bottom: 24px; display: flex; gap: 15px; align-items: center; background: var(--surface); padding: 16px 20px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
-          <input type="text" id="consonant-words-search" class="form-control" placeholder="শব্দ, বর্ণ বা ছড়া লিখে খুঁজুন..." oninput="filterGrid('consonant-words')" style="max-width: 350px;">
-          <select id="consonant-words-filter" class="form-control" onchange="filterGrid('consonant-words')" style="max-width: 200px; cursor: pointer;">
-            <option value="all">সব ভয়েস দেখান</option>
-            <option value="custom">কাস্টম ভয়েস আছে</option>
-            <option value="default">ডিফল্ট ভয়েস আছে</option>
-          </select>
-        </div>
-        <div class="grid-container" id="consonant-words-grid"></div>
-      </div>
-    </div>
-
-    <!-- English Category Tab Content -->
-    <div id="english-content" class="tab-content">
-      <div style="text-align: center; padding: 60px 40px; background: var(--surface); border-radius: 20px; border: 1px solid var(--border);">
-        <div style="font-size: 56px; margin-bottom: 24px;">🇬🇧</div>
-        <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 12px; color: var(--text);">ইংরেজি শিক্ষার সেটিংস</h2>
-        <p style="color: var(--text-muted); font-size: 15px;">ইংরেজি ক্যাটাগরির বর্ণমালা ও শব্দ আপডেটের অপশন শীঘ্রই যুক্ত করা হবে।</p>
-      </div>
-    </div>
-
-    <!-- Math Category Tab Content -->
-    <div id="math-content" class="tab-content">
-      <div style="text-align: center; padding: 60px 40px; background: var(--surface); border-radius: 20px; border: 1px solid var(--border);">
-        <div style="font-size: 56px; margin-bottom: 24px;">🔢</div>
-        <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 12px; color: var(--text);">অংক শিক্ষার সেটিংস</h2>
-        <p style="color: var(--text-muted); font-size: 15px;">অংক ক্যাটাগরির সংখ্যা ও যোগ-বিয়োগের মান আপডেটের অপশন শীঘ্রই যুক্ত করা হবে।</p>
-      </div>
-    </div>
-
-    <!-- Arabic Category Tab Content -->
-    <div id="arabic-content" class="tab-content">
-      <div style="text-align: center; padding: 60px 40px; background: var(--surface); border-radius: 20px; border: 1px solid var(--border);">
-        <div style="font-size: 56px; margin-bottom: 24px;">🕌</div>
-        <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 12px; color: var(--text);">আরবী শিক্ষার সেটিংস</h2>
-        <p style="color: var(--text-muted); font-size: 15px;">আরবী ক্যাটাগরির হরফ ও কুরআন শিক্ষার মান আপডেটের অপশন শীঘ্রই যুক্ত করা হবে।</p>
-      </div>
-    </div>
-
-    <!-- Categories Settings Tab Content -->
-    <div id="categories-content" class="tab-content">
-      <div class="search-bar-container" style="margin-bottom: 24px; display: flex; gap: 15px; align-items: center; background: var(--surface); padding: 16px 20px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
-        <input type="text" id="categories-search" class="form-control" placeholder="ক্যাটাগরি নাম লিখে খুঁজুন..." oninput="filterGrid('categories')" style="max-width: 350px;">
-        <select id="categories-filter" class="form-control" onchange="filterGrid('categories')" style="max-width: 200px; cursor: pointer;">
-          <option value="all">সব ভয়েস দেখান</option>
-          <option value="custom">কাস্টম ভয়েস আছে</option>
-          <option value="default">ডিফল্ট ভয়েস আছে</option>
-        </select>
-      </div>
-      <div class="grid-container" id="categories-grid"></div>
-    </div>
-
-    <!-- Settings Tab Content -->
-    <div id="settings-content" class="tab-content">
-      <div style="max-width: 600px; margin: 0 auto; background: var(--surface); border: 1px solid var(--border); padding: 30px; border-radius: 20px;">
-        <h2 style="margin-bottom: 24px; font-weight: 800; font-size: 20px;">অ্যাপ খোলার স্বাগত বক্তব্য ও ভয়েস পরিবর্তন</h2>
-        <form id="settings-form" onsubmit="saveSettings(event)">
-          <div class="form-group">
-            <label>অ্যাপ খোলার স্বাগত বক্তব্য (Welcome Text)</label>
-            <textarea id="settings-welcome-text" class="form-control" rows="3" style="font-family: inherit; resize: vertical;"></textarea>
-          </div>
-          <div class="form-group">
-            <label>স্বাগত বক্তব্যের কাস্টম ভয়েস ফাইল আপলোড (.mp3)</label>
-            <input type="file" id="settings-welcome-audio-file" accept="audio/mp3,audio/*" style="display:none" onchange="uploadFile(this, 'settings-welcome-audio-url')">
-            <div class="file-upload-zone" onclick="document.getElementById('settings-welcome-audio-file').click()">
-              <p id="settings-welcome-audio-filename">স্বাগত বক্তব্যের ভয়েস আপলোড করতে এখানে ক্লিক করুন</p>
-            </div>
-            <input type="hidden" id="settings-welcome-audio-url">
-            <div style="margin-top:10px;">
-              <button type="button" class="btn btn-secondary" onclick="previewFormAudio('settings-welcome-audio-url')" style="padding: 6px 12px; font-size: 13px; display: flex; align-items: center; gap: 6px;">
-                <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
-              </button>
-            </div>
-          </div>
-          <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
-          <div class="form-group">
-            <label>বাংলা স্ক্রিন শুরুর স্বাগত বক্তব্য (Bangla Intro Text)</label>
-            <textarea id="settings-bangla-text" class="form-control" rows="3" style="font-family: inherit; resize: vertical;"></textarea>
-          </div>
-          <div class="form-group">
-            <label>বাংলা স্ক্রিন শুরুর কাস্টম ভয়েস ফাইল আপলোড (.mp3)</label>
-            <input type="file" id="settings-bangla-audio-file" accept="audio/mp3,audio/*" style="display:none" onchange="uploadFile(this, 'settings-bangla-audio-url')">
-            <div class="file-upload-zone" onclick="document.getElementById('settings-bangla-audio-file').click()">
-              <p id="settings-bangla-audio-filename">বাংলা স্ক্রিনের ভয়েস আপলোড করতে এখানে ক্লিক করুন</p>
-            </div>
-            <input type="hidden" id="settings-bangla-audio-url">
-            <div style="margin-top:10px;">
-              <button type="button" class="btn btn-secondary" onclick="previewFormAudio('settings-bangla-audio-url')" style="padding: 6px 12px; font-size: 13px; display: flex; align-items: center; gap: 6px;">
-                <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
-              </button>
-            </div>
-          </div>
-          <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
-          <div class="form-group">
-            <label>স্বরবর্ণ পেজ শুরুর স্বাগত বক্তব্য (Vowels Intro Text)</label>
-            <textarea id="settings-vowels-text" class="form-control" rows="3" style="font-family: inherit; resize: vertical;"></textarea>
-          </div>
-          <div class="form-group">
-            <label>স্বরবর্ণ পেজ শুরুর কাস্টম ভয়েস ফাইল আপলোড (.mp3)</label>
-            <input type="file" id="settings-vowels-audio-file" accept="audio/mp3,audio/*" style="display:none" onchange="uploadFile(this, 'settings-vowels-audio-url')">
-            <div class="file-upload-zone" onclick="document.getElementById('settings-vowels-audio-file').click()">
-              <p id="settings-vowels-audio-filename">স্বরবর্ণ পেজের ভয়েস আপলোড করতে এখানে ক্লিক করুন</p>
-            </div>
-            <input type="hidden" id="settings-vowels-audio-url">
-            <div style="margin-top:10px;">
-              <button type="button" class="btn btn-secondary" onclick="previewFormAudio('settings-vowels-audio-url')" style="padding: 6px 12px; font-size: 13px; display: flex; align-items: center; gap: 6px;">
-                <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
-              </button>
-            </div>
-          </div>
-          <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
-          <div class="form-group">
-            <label>ব্যঞ্জনবর্ণ পেজ শুরুর স্বাগত বক্তব্য (Consonants Intro Text)</label>
-            <textarea id="settings-consonants-text" class="form-control" rows="3" style="font-family: inherit; resize: vertical;"></textarea>
-          </div>
-          <div class="form-group">
-            <label>ব্যঞ্জনবর্ণ পেজ শুরুর কাস্টম ভয়েস ফাইল আপলোড (.mp3)</label>
-            <input type="file" id="settings-consonants-audio-file" accept="audio/mp3,audio/*" style="display:none" onchange="uploadFile(this, 'settings-consonants-audio-url')">
-            <div class="file-upload-zone" onclick="document.getElementById('settings-consonants-audio-file').click()">
-              <p id="settings-consonants-audio-filename">ব্যঞ্জনবর্ণ পেজের ভয়েস আপলোড করতে এখানে ক্লিক করুন</p>
-            </div>
-            <input type="hidden" id="settings-consonants-audio-url">
-            <div style="margin-top:10px;">
-              <button type="button" class="btn btn-secondary" onclick="previewFormAudio('settings-consonants-audio-url')" style="padding: 6px 12px; font-size: 13px; display: flex; align-items: center; gap: 6px;">
-                <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
-              </button>
-            </div>
-          </div>
-          <div style="margin-top: 30px;">
-            <button type="submit" class="btn btn-primary" style="width: 100%;">সেটিংস সংরক্ষণ করুন</button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <!-- Reset Data Button -->
-    <div class="reset-btn-container">
-      <button class="btn btn-danger" onclick="resetDatabase()">ফ্যাক্টরি রিসেট (পুনরায় মূল অ্যাপ ডাটায় ফেরত যান)</button>
-    </div>
     </div>
   </div>
 
@@ -787,8 +389,8 @@
           </div>
           <input type="hidden" id="vowel-audio-url">
           <div style="margin-top:10px;">
-            <button type="button" class="btn btn-secondary" onclick="previewFormAudio('vowel-audio-url')" style="padding: 6px 12px; font-size: 13px; display: flex; align-items: center; gap: 6px;">
-              <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
+            <button type="button" class="btn btn-secondary" onclick="previewFormAudio('vowel-audio-url')">
+              <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;margin-right:4px;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
             </button>
           </div>
         </div>
@@ -834,8 +436,8 @@
           </div>
           <input type="hidden" id="consonant-audio-url">
           <div style="margin-top:10px;">
-            <button type="button" class="btn btn-secondary" onclick="previewFormAudio('consonant-audio-url')" style="padding: 6px 12px; font-size: 13px; display: flex; align-items: center; gap: 6px;">
-              <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
+            <button type="button" class="btn btn-secondary" onclick="previewFormAudio('consonant-audio-url')">
+              <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;margin-right:4px;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
             </button>
           </div>
         </div>
@@ -897,8 +499,8 @@
           </div>
           <input type="hidden" id="word-audio-url">
           <div style="margin-top:10px;">
-            <button type="button" class="btn btn-secondary" onclick="previewFormAudio('word-audio-url')" style="padding: 6px 12px; font-size: 13px; display: flex; align-items: center; gap: 6px;">
-              <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
+            <button type="button" class="btn btn-secondary" onclick="previewFormAudio('word-audio-url')">
+              <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;margin-right:4px;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
             </button>
           </div>
         </div>
@@ -960,8 +562,8 @@
           </div>
           <input type="hidden" id="consonant-word-audio-url">
           <div style="margin-top:10px;">
-            <button type="button" class="btn btn-secondary" onclick="previewFormAudio('consonant-word-audio-url')" style="padding: 6px 12px; font-size: 13px; display: flex; align-items: center; gap: 6px;">
-              <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
+            <button type="button" class="btn btn-secondary" onclick="previewFormAudio('consonant-word-audio-url')">
+              <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;margin-right:4px;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
             </button>
           </div>
         </div>
@@ -1023,8 +625,8 @@
           </div>
           <input type="hidden" id="category-audio-url">
           <div style="margin-top:10px;">
-            <button type="button" class="btn btn-secondary" onclick="previewFormAudio('category-audio-url')" style="padding: 6px 12px; font-size: 13px; display: flex; align-items: center; gap: 6px;">
-              <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
+            <button type="button" class="btn btn-secondary" onclick="previewFormAudio('category-audio-url')">
+              <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;margin-right:4px;"><path d="M8 5v14l11-7z"/></svg> ভয়েস শুনুন (Preview Voice)
             </button>
           </div>
         </div>
@@ -1088,10 +690,10 @@
       const welcomeFileLabel = document.getElementById('settings-welcome-audio-filename');
       if (settings.welcomeAudioPath && settings.welcomeAudioPath.startsWith('http')) {
         welcomeFileLabel.textContent = 'কাস্টম ভয়েস আপলোড আছে';
-        welcomeFileLabel.style.color = 'var(--success)';
+        welcomeFileLabel.style.color = 'var(--wp-success)';
       } else {
         welcomeFileLabel.textContent = 'স্বাগত বক্তব্যের ভয়েস আপলোড করতে এখানে ক্লিক করুন';
-        welcomeFileLabel.style.color = 'var(--text-muted)';
+        welcomeFileLabel.style.color = '';
       }
 
       document.getElementById('settings-bangla-text').value = settings.banglaIntroText || '';
@@ -1100,10 +702,10 @@
       const banglaFileLabel = document.getElementById('settings-bangla-audio-filename');
       if (settings.banglaIntroAudioPath && settings.banglaIntroAudioPath.startsWith('http')) {
         banglaFileLabel.textContent = 'কাস্টম ভয়েস আপলোড আছে';
-        banglaFileLabel.style.color = 'var(--success)';
+        banglaFileLabel.style.color = 'var(--wp-success)';
       } else {
         banglaFileLabel.textContent = 'বাংলা স্ক্রিনের ভয়েস আপলোড করতে এখানে ক্লিক করুন';
-        banglaFileLabel.style.color = 'var(--text-muted)';
+        banglaFileLabel.style.color = '';
       }
 
       document.getElementById('settings-vowels-text').value = settings.vowelsIntroText || '';
@@ -1112,10 +714,10 @@
       const vowelsFileLabel = document.getElementById('settings-vowels-audio-filename');
       if (settings.vowelsIntroAudioPath && settings.vowelsIntroAudioPath.startsWith('http')) {
         vowelsFileLabel.textContent = 'কাস্টম ভয়েস আপলোড আছে';
-        vowelsFileLabel.style.color = 'var(--success)';
+        vowelsFileLabel.style.color = 'var(--wp-success)';
       } else {
         vowelsFileLabel.textContent = 'স্বরবর্ণ পেজের ভয়েস আপলোড করতে এখানে ক্লিক করুন';
-        vowelsFileLabel.style.color = 'var(--text-muted)';
+        vowelsFileLabel.style.color = '';
       }
 
       document.getElementById('settings-consonants-text').value = settings.consonantsIntroText || '';
@@ -1124,26 +726,54 @@
       const consonantsFileLabel = document.getElementById('settings-consonants-audio-filename');
       if (settings.consonantsIntroAudioPath && settings.consonantsIntroAudioPath.startsWith('http')) {
         consonantsFileLabel.textContent = 'কাস্টম ভয়েস আপলোড আছে';
-        consonantsFileLabel.style.color = 'var(--success)';
+        consonantsFileLabel.style.color = 'var(--wp-success)';
       } else {
         consonantsFileLabel.textContent = 'ব্যঞ্জনবর্ণ পেজের ভয়েস আপলোড করতে এখানে ক্লিক করুন';
-        consonantsFileLabel.style.color = 'var(--text-muted)';
+        consonantsFileLabel.style.color = '';
       }
     }
 
     function updateStats() {
+      // Top Admin bar stats
       document.getElementById('vowel-count').textContent = `স্বরবর্ণ: ${currentVowels.length}`;
       document.getElementById('consonant-count').textContent = `ব্যঞ্জনবর্ণ: ${currentConsonants.length}`;
       document.getElementById('word-count').textContent = `স্বর শব্দ: ${currentWords.length}`;
       document.getElementById('consonant-word-count').textContent = `ব্যঞ্জন শব্দ: ${currentConsonantWords.length}`;
+
+      // Dashboard widgets stats
+      const dashVowel = document.getElementById('dash-vowel-count');
+      if (dashVowel) dashVowel.textContent = `${currentVowels.length} স্বরবর্ণ`;
+      const dashConsonants = document.getElementById('dash-consonant-count');
+      if (dashConsonants) dashConsonants.textContent = `${currentConsonants.length} ব্যঞ্জনবর্ণ`;
+      const dashWords = document.getElementById('dash-word-count');
+      if (dashWords) dashWords.textContent = `${currentWords.length} স্বর শব্দ`;
+      const dashConsonantWords = document.getElementById('dash-consonant-word-count');
+      if (dashConsonantWords) dashConsonantWords.textContent = `${currentConsonantWords.length} ব্যঞ্জন শব্দ`;
     }
 
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    function switchTab(tabId, el) {
+      // 1. Deactivate all navigation items
+      document.querySelectorAll('#adminmenu .nav-item').forEach(item => item.classList.remove('active'));
+
+      // 2. Hide all tab content
       document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
 
-      event.target.classList.add('active');
-      document.getElementById(`${tabId}-content`).classList.add('active');
+      // 3. Set active navigation tab
+      if (el) {
+        el.classList.add('active');
+      } else {
+        const targetNav = document.querySelector(`#adminmenu .nav-item[data-tab="${tabId}"]`);
+        if (targetNav) targetNav.classList.add('active');
+      }
+
+      // 4. Show target tab content
+      const targetContent = document.getElementById(`${tabId}-content`);
+      if (targetContent) {
+        targetContent.classList.add('active');
+      }
+
+      // Close mobile menu if open
+      document.getElementById('adminmenu').classList.remove('active');
     }
 
     function switchSubTab(subTabId) {
@@ -1169,19 +799,16 @@
     }
 
     function navigateToSubTab(subTabName, subTabIndex) {
-      // 1. Activate Bangla tab
-      const banglaTabBtn = document.querySelectorAll('.tab-btn')[0];
-      if (banglaTabBtn) {
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-        banglaTabBtn.classList.add('active');
-        document.getElementById('bangla-content').classList.add('active');
-      }
-      // 2. Activate the sub-tab
-      const subTabBtn = document.querySelectorAll('.sub-tab-btn')[subTabIndex];
+      // 1. Switch to Bangla tab
+      const banglaNav = document.querySelector('#adminmenu .nav-item[data-tab="bangla"]');
+      switchTab('bangla', banglaNav);
+
+      // 2. Set the subtab inside Bangla active
+      const subTabBtn = document.querySelectorAll('.sub-tabs .sub-tab-btn')[subTabIndex];
       if (subTabBtn) {
-        document.querySelectorAll('.sub-tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.sub-tabs .sub-tab-btn').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.sub-tab-view').forEach(view => view.style.display = 'none');
+
         subTabBtn.classList.add('active');
         document.getElementById(`sub-${subTabName}-view`).style.display = 'block';
 
@@ -1199,6 +826,10 @@
           }
         }
       }
+    }
+
+    function toggleMobileMenu() {
+      document.getElementById('adminmenu').classList.toggle('active');
     }
 
     function filterGrid(type) {
@@ -1324,7 +955,7 @@
             imageHTML = `<img src="${item.imagePath}" alt="${item.word}">`;
           } else {
             // Local asset
-            imageHTML = `<div style="font-size:12px;color:var(--text-muted);text-align:center;padding:10px;">মোবাইল অ্যাসেট:<br>${item.imagePath.split('/').pop()}</div>`;
+            imageHTML = `<div style="font-size:11px;color:var(--wp-text-muted);text-align:center;padding:10px;">মোবাইল অ্যাসেট:<br>${item.imagePath.split('/').pop()}</div>`;
           }
         }
 
@@ -1364,7 +995,7 @@
             imageHTML = `<img src="${item.imagePath}" alt="${item.word}">`;
           } else {
             // Local asset
-            imageHTML = `<div style="font-size:12px;color:var(--text-muted);text-align:center;padding:10px;">মোবাইল অ্যাসেট:<br>${item.imagePath.split('/').pop()}</div>`;
+            imageHTML = `<div style="font-size:11px;color:var(--wp-text-muted);text-align:center;padding:10px;">মোবাইল অ্যাসেট:<br>${item.imagePath.split('/').pop()}</div>`;
           }
         }
 
@@ -1382,7 +1013,7 @@
               </button>
               ${item.audioPath && item.audioPath.startsWith('http') 
                 ? '<span class="badge badge-custom">কাস্টম ভয়েস</span>' 
-                : '<span class="badge badge-default">ডিফল্ট</span>'}
+                : '<span class="badge badge-default">ডিচল্ট</span>'}
             </div>
           </div>
           <button class="edit-btn" onclick="openEditConsonantWord(${index})">সম্পাদন করুন</button>
@@ -1405,7 +1036,7 @@
       const file = inputElement.files[0];
       if (!file) return;
 
-      const filenameLabel = inputElement.nextElementSibling.querySelector('p');
+      const filenameLabel = inputElement.nextElementSibling.querySelector('p') || inputElement.nextElementSibling;
       filenameLabel.textContent = `আপলোড হচ্ছে: ${file.name}...`;
 
       const formData = new FormData();
@@ -1420,7 +1051,7 @@
         if (data.url) {
           document.getElementById(targetUrlId).value = data.url;
           filenameLabel.textContent = `সফলভাবে আপলোড হয়েছে: ${file.name}`;
-          filenameLabel.style.color = 'var(--success)';
+          filenameLabel.style.color = 'var(--wp-success)';
           
           // Auto save form upon successful voice/image upload
           const formElement = inputElement.closest('form');
@@ -1430,12 +1061,12 @@
           }
         } else {
           filenameLabel.textContent = `আপলোড ব্যর্থ হয়েছে`;
-          filenameLabel.style.color = 'var(--danger)';
+          filenameLabel.style.color = 'var(--wp-danger)';
         }
       })
       .catch(err => {
         filenameLabel.textContent = `আপলোড ত্রুটি`;
-        filenameLabel.style.color = 'var(--danger)';
+        filenameLabel.style.color = 'var(--wp-danger)';
         console.error(err);
       });
     }
@@ -1451,7 +1082,7 @@
       document.getElementById('vowel-card-color').value = item.cardColor;
       document.getElementById('vowel-audio-url').value = item.audioPath;
       document.getElementById('vowel-audio-filename').textContent = item.audioPath.startsWith('http') ? 'কাস্টম ভয়েস আপলোড আছে' : 'ভয়েস আপলোড করতে এখানে ক্লিক করুন';
-      document.getElementById('vowel-audio-filename').style.color = item.audioPath.startsWith('http') ? 'var(--success)' : 'var(--text-muted)';
+      document.getElementById('vowel-audio-filename').style.color = item.audioPath.startsWith('http') ? 'var(--wp-success)' : '';
       openModal('vowel-modal');
     }
 
@@ -1494,7 +1125,7 @@
       document.getElementById('consonant-card-color').value = item.cardColor;
       document.getElementById('consonant-audio-url').value = item.audioPath;
       document.getElementById('consonant-audio-filename').textContent = item.audioPath.startsWith('http') ? 'কাস্টম ভয়েস আপলোড আছে' : 'ভয়েস আপলোড করতে এখানে ক্লিক করুন';
-      document.getElementById('consonant-audio-filename').style.color = item.audioPath.startsWith('http') ? 'var(--success)' : 'var(--text-muted)';
+      document.getElementById('consonant-audio-filename').style.color = item.audioPath.startsWith('http') ? 'var(--wp-success)' : '';
       openModal('consonant-modal');
     }
 
@@ -1540,10 +1171,10 @@
       document.getElementById('word-audio-url').value = item.audioPath;
 
       document.getElementById('word-image-filename').textContent = item.imagePath.startsWith('http') ? 'কাস্টম কার্টুন ছবি আপলোড আছে' : 'কার্টুন ছবি আপলোড করতে এখানে ক্লিক করুন';
-      document.getElementById('word-image-filename').style.color = item.imagePath.startsWith('http') ? 'var(--success)' : 'var(--text-muted)';
+      document.getElementById('word-image-filename').style.color = item.imagePath.startsWith('http') ? 'var(--wp-success)' : '';
       
       document.getElementById('word-audio-filename').textContent = item.audioPath.startsWith('http') ? 'কাস্টম ভয়েস আপলোড আছে' : 'শব্দের সম্পূর্ণ ভয়েস আপলোড করতে এখানে ক্লিক করুন';
-      document.getElementById('word-audio-filename').style.color = item.audioPath.startsWith('http') ? 'var(--success)' : 'var(--text-muted)';
+      document.getElementById('word-audio-filename').style.color = item.audioPath.startsWith('http') ? 'var(--wp-success)' : '';
       
       openModal('word-modal');
     }
@@ -1593,10 +1224,10 @@
       document.getElementById('consonant-word-audio-url').value = item.audioPath;
 
       document.getElementById('consonant-word-image-filename').textContent = item.imagePath.startsWith('http') ? 'কাস্টম ছবি আপলোড আছে' : 'কার্টুন ছবি আপলোড করতে এখানে ক্লিক করুন';
-      document.getElementById('consonant-word-image-filename').style.color = item.imagePath.startsWith('http') ? 'var(--success)' : 'var(--text-muted)';
+      document.getElementById('consonant-word-image-filename').style.color = item.imagePath.startsWith('http') ? 'var(--wp-success)' : '';
       
       document.getElementById('consonant-word-audio-filename').textContent = item.audioPath.startsWith('http') ? 'কাস্টম ভয়েস আপলোড আছে' : 'শব্দের সম্পূর্ণ ভয়েস আপলোড করতে এখানে ক্লিক করুন';
-      document.getElementById('consonant-word-audio-filename').style.color = item.audioPath.startsWith('http') ? 'var(--success)' : 'var(--text-muted)';
+      document.getElementById('consonant-word-audio-filename').style.color = item.audioPath.startsWith('http') ? 'var(--wp-success)' : '';
       
       openModal('consonant-word-modal');
     }
@@ -1679,7 +1310,7 @@
           if (item.imagePath.startsWith('http://') || item.imagePath.startsWith('https://')) {
             imageHTML = `<img src="${item.imagePath}" alt="${item.title}">`;
           } else {
-            imageHTML = `<div style="font-size:12px;color:var(--text-muted);text-align:center;padding:10px;">মোবাইল অ্যাসেট:<br>${item.imagePath.split('/').pop()}</div>`;
+            imageHTML = `<div style="font-size:11px;color:var(--wp-text-muted);text-align:center;padding:10px;">মোবাইল অ্যাসেট:<br>${item.imagePath.split('/').pop()}</div>`;
           }
         }
 
@@ -1725,20 +1356,20 @@
       const imageLabel = document.getElementById('category-image-filename');
       if (item.imagePath && item.imagePath.startsWith('http')) {
         imageLabel.textContent = 'কাস্টম ছবি আপলোড আছে';
-        imageLabel.style.color = 'var(--success)';
+        imageLabel.style.color = 'var(--wp-success)';
       } else {
         imageLabel.textContent = 'ক্যাটাগরি কাভার ছবি আপলোড করতে এখানে ক্লিক করুন';
-        imageLabel.style.color = 'var(--text-muted)';
+        imageLabel.style.color = '';
       }
 
       document.getElementById('category-audio-url').value = item.audioPath || '';
       const audioLabel = document.getElementById('category-audio-filename');
       if (item.audioPath && item.audioPath.startsWith('http')) {
         audioLabel.textContent = 'কাস্টম ভয়েস আপলোড আছে';
-        audioLabel.style.color = 'var(--success)';
+        audioLabel.style.color = 'var(--wp-success)';
       } else {
         audioLabel.textContent = 'স্বাগত ভয়েস আপলোড করতে এখানে ক্লিক করুন';
-        audioLabel.style.color = 'var(--text-muted)';
+        audioLabel.style.color = '';
       }
 
       // Configure auto-save uploader reference
